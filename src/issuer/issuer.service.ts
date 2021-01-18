@@ -8,7 +8,7 @@ import {
 import { CredentialSubject } from 'library-issuer-verifier-utility/build/types';
 
 @Injectable()
-export class CredentialsService {
+export class IssuerService {
   issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: Date): Promise<IssuedCredentialDto> {
     try {
       return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, expirationDate);
