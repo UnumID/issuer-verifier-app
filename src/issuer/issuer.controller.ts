@@ -5,6 +5,7 @@ import { IssuerService } from './issuer.service';
 export class IssuerController {
   constructor (private issuerService: IssuerService) {}
 
+  // todo and real types to these requests
   @Post('register')
   async register (@Body() dto: any) {
     return await this.issuerService.registerIssuer(dto.name, dto.customerUuid, dto.apiKey);
