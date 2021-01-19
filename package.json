@@ -1,8 +1,11 @@
 {
   "name": "issuer-verifier-app",
   "version": "0.0.1",
-  "description": "",
-  "author": "Ray Smets",
+  "description": "A web app to interface with and showcase the Issuer and Verifier SDKs.",
+  "author": {
+    "name": "Unum ID",
+    "email": "admin@unumid.org"
+  },
   "private": true,
   "license": "MIT",
   "repository": {
@@ -41,6 +44,7 @@
     "Library-Issuer-Verifier-Utility": "git+https://github.com/UnumID/library-issuer-verifier-utility.git#logging",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.1",
+    "readme-md-generator": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3"
