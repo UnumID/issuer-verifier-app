@@ -1,5 +1,5 @@
-<h1 align="center">Welcome to issuer-verifier-app 👋</h1>
-<p>
+<h1 align="center">Welcome to UnumID's issuer-verifier-app 👋</h1>
+<p align="center">
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/npm-%3E%3D6.0.0-blue.svg" />
   <img src="https://img.shields.io/badge/node-%3E%3D12.0.0-blue.svg" />
@@ -9,22 +9,13 @@
   <a href="https://github.com/UnumID/issuer-verifier-app/graphs/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
-  <a href=" " target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/UnumID/issuer-verifier-app" />
-  </a>
-  <a href="https://twitter.com/Unum\_ID" target="_blank">
-    <img alt="Twitter: Unum\_ID" src="https://img.shields.io/twitter/follow/Unum\_ID.svg?style=social" />
+  <a href="https://twitter.com/unum_id?lang=en" target="_blank">
+    <img alt="Twitter: Unum\_ID" src="https://img.shields.io/twitter/follow/Unum_ID.svg?style=social" />
   </a>
 </p>
 
-> A web app to interface with and showcase the Issuer and Verifier SDKs.
-
-### ✨ [Demo](issuer-verifier.dev-unumid.org)
-
-## Prerequisites
-
-- npm >=6.0.0
-- node >=12.0.0
+## Description
+A web app to interface with and showcase the Issuer and Verifier SDKs.
 
 ## Install
 
