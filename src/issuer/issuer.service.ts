@@ -6,7 +6,7 @@ import {
   IssuedCredentialDto,
   RevokedCredentialDto,
   RegisteredIssuerDto
-} from '@UnumId/issuer-sdk';
+} from '@UnumId/issuer-server-sdk';
 import { CredentialSubject } from 'library-issuer-verifier-utility/build/types';
 
 @Injectable()

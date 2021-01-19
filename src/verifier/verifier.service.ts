@@ -11,7 +11,7 @@ import {
   PresentationRequestResponseDto,
   NoPresentation,
   Presentation
-} from '@UnumId/verifier-sdk';
+} from '@UnumId/verifier-server-sdk';
 
 @Injectable()
 export class VerifierService {
