@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Response } from '@nestjs/common';
+import { Body, Controller, Post, Response, UseGuards } from '@nestjs/common';
 import { VerifierService } from './verifier.service';
 import { Response as Res } from 'express';
 import {
@@ -7,8 +7,10 @@ import {
   VerifierDto,
   RegisteredVerifier
 } from '@UnumId/verifier-server-sdk';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('verifier')
+@UseGuards(new AuthGuard())
 export class VerifierController {
   constructor (private verifierService: VerifierService) {}
 

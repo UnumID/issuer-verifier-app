@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, Response } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Response, UseGuards } from '@nestjs/common';
 import { Response as Res } from 'express';
 import { IssuerService } from './issuer.service';
 import {
@@ -9,8 +9,10 @@ import {
   RegisteredIssuer
 } from '@UnumId/issuer-server-sdk';
 import { Credential } from 'library-issuer-verifier-utility/build/types';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('issuer')
+@UseGuards(new AuthGuard())
 export class IssuerController {
   constructor (private issuerService: IssuerService) {}
 
