@@ -6,7 +6,7 @@ import {
   PresentationRequestResponse,
   VerifierDto,
   RegisteredVerifier
-} from '@UnumId/verifier-server-sdk';
+} from '@unumid/verifier-server-sdk';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('verifier')

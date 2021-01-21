@@ -5,7 +5,7 @@ import {
   registerIssuer as _registerIssuer,
   IssuerDto,
   RegisteredIssuer
-} from '@UnumId/issuer-server-sdk';
+} from '@unumid/issuer-server-sdk';
 import { CredentialSubject, Credential } from 'library-issuer-verifier-utility/build/types';
 
 @Injectable()

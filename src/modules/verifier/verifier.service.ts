@@ -12,7 +12,7 @@ import {
   PresentationRequestResponse,
   NoPresentation,
   Presentation
-} from '@UnumId/verifier-server-sdk';
+} from '@unumid/verifier-server-sdk';
 
 @Injectable()
 export class VerifierService {
