@@ -3,28 +3,32 @@ import {
   issueCredential as _issueCredential,
   revokeCredential as _revokeCredential,
   registerIssuer as _registerIssuer,
-  IssuedCredentialDto,
-  RevokedCredentialDto,
-  RegisteredIssuerDto
+  IssuerDto,
+  RegisteredIssuer
 } from '@UnumId/issuer-server-sdk';
-import { CredentialSubject } from 'library-issuer-verifier-utility/build/types';
+import { CredentialSubject, Credential } from 'library-issuer-verifier-utility/build/types';
 
 @Injectable()
 export class IssuerService {
-  registerIssuer (name: string, customerUuid: string, apiKey: string): Promise<RegisteredIssuerDto> {
-    return _registerIssuer(name, customerUuid, apiKey);
+  registerIssuer (name: string, customerUuid: string, apiKey: string): Promise<IssuerDto<RegisteredIssuer>> {
+    try {
+      return _registerIssuer(name, customerUuid, apiKey);
+    } catch (error) {
+      Logger.error(`Error using UnumID SDK registerIssuer ${error}`);
+      throw error;
+    }
   }
 
-  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: Date): Promise<IssuedCredentialDto> {
+  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: Date): Promise<IssuerDto<Credential>> {
     try {
-      return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, expirationDate);
+      return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, new Date(expirationDate));
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
       throw error;
     }
   }
 
-  revokeCredential (authorization: string, credentialId: string): Promise<RevokedCredentialDto> {
+  revokeCredential (authorization: string, credentialId: string): Promise<IssuerDto<Credential>> {
     try {
       return _revokeCredential(authorization, credentialId);
     } catch (error) {

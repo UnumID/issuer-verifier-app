@@ -6,36 +6,37 @@ import {
   sendRequest as _sendRequest,
   verifyNoPresentation as _verifyNoPresentation,
   verifyPresentation as _verifyPresentation,
-  RegisteredVerifierDto,
-  AuthDto,
-  PresentationRequestResponseDto,
+  RegisteredVerifier,
+  VerifierDto,
+  Receipt,
+  PresentationRequestResponse,
   NoPresentation,
   Presentation
 } from '@UnumId/verifier-server-sdk';
 
 @Injectable()
 export class VerifierService {
-  registerVerifier (name: string, customerUuid: string, url: string, apiKey: string): Promise<RegisteredVerifierDto> {
+  registerVerifier (name: string, customerUuid: string, url: string, apiKey: string): Promise<VerifierDto<RegisteredVerifier>> {
     return _registerVerifier(name, customerUuid, url, apiKey);
   }
 
-  sendEmail (authorization: string, to: string, subject: string, textBody: string, htmlBody: string): Promise<AuthDto> {
+  sendEmail (authorization: string, to: string, subject: string, textBody: string, htmlBody: string): Promise<VerifierDto> {
     return _sendEmail(authorization, to, subject, textBody, htmlBody);
   }
 
-  sendSms (authorization: string, to: string, msg: string): Promise<AuthDto> {
+  sendSms (authorization: string, to: string, msg: string): Promise<VerifierDto> {
     return _sendSms(authorization, to, msg);
   }
 
-  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string): Promise<PresentationRequestResponseDto> {
+  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string): Promise<VerifierDto<PresentationRequestResponse>> {
     return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid);
   }
 
-  verifyNoPresentation (authorization: string, noPresentation: NoPresentation, verifier: string) {
+  verifyNoPresentation (authorization: string, noPresentation: NoPresentation, verifier: string): Promise<VerifierDto<Receipt>> {
     return _verifyNoPresentation(authorization, noPresentation, verifier);
   }
 
-  verifyPresentation (authorization: string, presentation: Presentation, verifier: string) {
+  verifyPresentation (authorization: string, presentation: Presentation, verifier: string): Promise<VerifierDto<Receipt>> {
     return _verifyPresentation(authorization, presentation, verifier);
   }
 }
