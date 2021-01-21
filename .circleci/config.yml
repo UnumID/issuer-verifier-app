@@ -32,7 +32,7 @@ jobs:
           paths:
             - node_modules
 
-      - run: npm run lint
+      - run: yarn lint
       
       # - run:
           # name: Jest Tests
@@ -58,9 +58,9 @@ jobs:
             echo Building the Docker image...
             DOCKER_BUILDKIT=1 docker build -t ${CIRCLE_SHA1} --ssh github="$HOME/.ssh/id_rsa" .
             docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:dev-latest
-            docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:dev-${CIRCLE_BUILD_NUM}
+            docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:"${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}"
             echo Pushing the Docker image...
-            docker push << parameters.reg >>/<< parameters.repo >>:dev-${CIRCLE_BUILD_NUM}
+            docker push << parameters.reg >>/<< parameters.repo >>:"${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}"
             docker push << parameters.reg >>/<< parameters.repo >>:dev-latest
           name: Update container image
 
@@ -105,11 +105,11 @@ jobs:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           install-kubectl: true
-          aws-region: ${AWS_DEFAULT_REGION}
+          aws-region: ${AWS_REGION}
           cluster-name: << parameters.cluster-name >>
       - run:
           command: |
-            kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:dev-${CIRCLE_PREVIOUS_BUILD_NUM}
+            kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:"${CIRCLE_BRANCH}-${CIRCLE_PREVIOUS_BUILD_NUM}"
           name: Update container image
 
   deploy-image-release:
@@ -127,7 +127,7 @@ jobs:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           install-kubectl: true
-          aws-region: ${AWS_DEFAULT_REGION}
+          aws-region: ${AWS_REGION}
           cluster-name: << parameters.cluster-name >>
       - run:
           command: |
@@ -158,7 +158,6 @@ workflows:
       - deploy-image-release:
           requires:
             - build-and-push-image-release
-          context: AWS-Dev
           repo: issuer-verifier-app
           deployment: issuer-verifier
           filters:
@@ -204,7 +203,6 @@ workflows:
       - deploy-image:
           requires:
             - build-and-push-image
-          context: AWS-Dev
           repo: issuer-verifier-app
           deployment: issuer-verifier
           filters:
@@ -214,3 +212,4 @@ workflows:
                 - master
                 - main
                 - test-circleci
+
