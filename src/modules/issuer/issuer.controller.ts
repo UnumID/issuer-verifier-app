@@ -12,7 +12,7 @@ import { Credential } from 'library-issuer-verifier-utility/build/types';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('issuer')
-@UseGuards(new AuthGuard())
+@UseGuards(AuthGuard)
 export class IssuerController {
   constructor (private issuerService: IssuerService) {}
 

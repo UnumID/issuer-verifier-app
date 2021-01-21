@@ -10,7 +10,7 @@ import {
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('verifier')
-@UseGuards(new AuthGuard())
+@UseGuards(AuthGuard)
 export class VerifierController {
   constructor (private verifierService: VerifierService) {}
 
