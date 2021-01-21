@@ -7,7 +7,7 @@ import {
   registerIssuer as _registerIssuer,
   IssuerDto,
   RegisteredIssuer
-} from '@UnumId/issuer-server-sdk';
+} from '@unumid/issuer-server-sdk';
 import { Credential } from 'library-issuer-verifier-utility/build/types';
 import { AuthGuard } from 'src/guards/auth.guard';
 
