@@ -108,8 +108,9 @@ jobs:
           aws-region: ${AWS_DEFAULT_REGION}
           cluster-name: << parameters.cluster-name >>
       - run:
+        # kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:"dev-${CIRCLE_BRANCH}-${CIRCLE_PREVIOUS_BUILD_NUM}"
           command: |
-            kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:"dev-${CIRCLE_BRANCH}-${CIRCLE_PREVIOUS_BUILD_NUM}"
+            kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:"dev-latest"
           name: Update container image
 
   deploy-image-release:
@@ -179,30 +180,41 @@ workflows:
 
   build-and-deploy:
     jobs:
-      - lint-and-test-job:
-          filters:
-            branches:
-              only:
-                - development
-                - master
-                - main
-                - test-circleci
+    #   - lint-and-test-job:
+    #       filters:
+    #         branches:
+    #           only:
+    #             - development
+    #             - master
+    #             - main
+    #             - test-circleci
 
-      - build-and-push-image:
-          requires:
-            - lint-and-test-job
-          context: AWS-Dev
-          repo: issuer-verifier-app
-          filters:
-            branches:
-              only:
-                - development
-                - master
-                - main
-                - test-circleci
+    #   - build-and-push-image:
+    #       requires:
+    #         - lint-and-test-job
+    #       context: AWS-Dev
+    #       repo: issuer-verifier-app
+    #       filters:
+    #         branches:
+    #           only:
+    #             - development
+    #             - master
+    #             - main
+    #             - test-circleci
+    #   - deploy-image:
+    #       requires:
+    #         - build-and-push-image
+    #       repo: issuer-verifier-app
+    #       deployment: issuer-verifier
+    #       filters:
+    #         branches:
+    #           only:
+    #             - development
+    #             - master
+    #             - main
+    #             - test-circleci
+
       - deploy-image:
-          requires:
-            - build-and-push-image
           repo: issuer-verifier-app
           deployment: issuer-verifier
           filters:
@@ -212,4 +224,3 @@ workflows:
                 - master
                 - main
                 - test-circleci
-
