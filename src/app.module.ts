@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
-import { HealthModule } from './health/health.module';
-import { IssuerModule } from './issuer/issuer.module';
-import { VerifierModule } from './verifier/verifier.module';
+import { HealthModule } from './modules/health/health.module';
+import { IssuerModule } from './modules/issuer/issuer.module';
+import { VerifierModule } from './modules/verifier/verifier.module';
 
 @Module({
   imports: [
