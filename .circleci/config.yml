@@ -58,9 +58,9 @@ jobs:
             echo Building the Docker image...
             DOCKER_BUILDKIT=1 docker build -t ${CIRCLE_SHA1} --ssh github="$HOME/.ssh/id_rsa" .
             docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:dev-latest
-            docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:dev-"${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}"
+            docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:dev-${CIRCLE_BUILD_NUM}
             echo Pushing the Docker image...
-            docker push << parameters.reg >>/<< parameters.repo >>:dev-"${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}"
+            docker push << parameters.reg >>/<< parameters.repo >>:dev-${CIRCLE_BUILD_NUM}
             docker push << parameters.reg >>/<< parameters.repo >>:dev-latest
           name: Update container image
 
@@ -108,9 +108,8 @@ jobs:
           aws-region: ${AWS_DEFAULT_REGION}
           cluster-name: << parameters.cluster-name >>
       - run:
-        # kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:"dev-${CIRCLE_BRANCH}-${CIRCLE_PREVIOUS_BUILD_NUM}"
           command: |
-            kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:"dev-latest"
+            # kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:dev-${CIRCLE_PREVIOUS_BUILD_NUM}
           name: Update container image
 
   deploy-image-release:
