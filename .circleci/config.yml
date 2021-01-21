@@ -159,6 +159,7 @@ workflows:
       - deploy-image-release:
           requires:
             - build-and-push-image-release
+          context: AWS-Dev
           repo: issuer-verifier-app
           deployment: issuer-verifier
           filters:
@@ -180,41 +181,31 @@ workflows:
 
   build-and-deploy:
     jobs:
-    #   - lint-and-test-job:
-    #       filters:
-    #         branches:
-    #           only:
-    #             - development
-    #             - master
-    #             - main
-    #             - test-circleci
+      - lint-and-test-job:
+          filters:
+            branches:
+              only:
+                - development
+                - master
+                - main
+                - test-circleci
 
-    #   - build-and-push-image:
-    #       requires:
-    #         - lint-and-test-job
-    #       context: AWS-Dev
-    #       repo: issuer-verifier-app
-    #       filters:
-    #         branches:
-    #           only:
-    #             - development
-    #             - master
-    #             - main
-    #             - test-circleci
-    #   - deploy-image:
-    #       requires:
-    #         - build-and-push-image
-    #       repo: issuer-verifier-app
-    #       deployment: issuer-verifier
-    #       filters:
-    #         branches:
-    #           only:
-    #             - development
-    #             - master
-    #             - main
-    #             - test-circleci
-
+      - build-and-push-image:
+          requires:
+            - lint-and-test-job
+          context: AWS-Dev
+          repo: issuer-verifier-app
+          filters:
+            branches:
+              only:
+                - development
+                - master
+                - main
+                - test-circleci
       - deploy-image:
+          requires:
+            - build-and-push-image
+          context: AWS-Dev
           repo: issuer-verifier-app
           deployment: issuer-verifier
           filters:
