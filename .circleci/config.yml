@@ -84,9 +84,9 @@ jobs:
             echo Building the Docker image...
             DOCKER_BUILDKIT=1 docker build -t ${CIRCLE_SHA1} --ssh github="$HOME/.ssh/id_rsa" .
             docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:sandbox-latest
-            docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:sandbox-"${CIRCLE_TAG}"
+            docker tag ${CIRCLE_SHA1} << parameters.reg >>/<< parameters.repo >>:"${CIRCLE_TAG}"
             echo Pushing the Docker image...
-            docker push << parameters.reg >>/<< parameters.repo >>:sandbox-"${CIRCLE_TAG}"
+            docker push << parameters.reg >>/<< parameters.repo >>:"${CIRCLE_TAG}"
             docker push << parameters.reg >>/<< parameters.repo >>:sandbox-latest
           name: Update container image
 
@@ -131,7 +131,7 @@ jobs:
           cluster-name: << parameters.cluster-name >>
       - run:
           command: |
-            kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:"sandbox-${CIRCLE_TAG}"
+            kubectl set image deployment/<< parameters.deployment >> << parameters.deployment >>=${AWS_ECR_URL}/<< parameters.repo >>:"${CIRCLE_TAG}"
           name: Update container image
 
 workflows:
