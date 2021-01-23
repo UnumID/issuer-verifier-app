@@ -36,8 +36,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@unumid/issuer-server-sdk": "git+ssh://git@github.com/UnumID/issuer-server-sdk-typescript.git#v0.1.0",
-    "@unumid/verifier-server-sdk": "git+ssh://git@github.com/UnumID/verifier-server-sdk-typescript.git#v0.1.1",
+    "@unumid/issuer-server-sdk": "git+ssh://git@github.com/UnumID/issuer-server-sdk-typescript.git#v0.1.2",
+    "@unumid/verifier-server-sdk": "git+ssh://git@github.com/UnumID/verifier-server-sdk-typescript.git#v0.2.0",
     "@nestjs/common": "^7.5.1",
     "@nestjs/config": "^0.6.1",
     "@nestjs/core": "^7.5.1",
