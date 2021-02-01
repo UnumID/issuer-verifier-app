@@ -9,8 +9,7 @@ import {
 } from '@unumid/verifier-server-sdk';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('verifier')
-@UseGuards(AuthGuard)
+@Controller('verifier/api')
 export class VerifierController {
   constructor (private verifierService: VerifierService) {}
 
@@ -23,13 +22,17 @@ export class VerifierController {
   }
 
   @Post('sendEmail')
+  @UseGuards(AuthGuard)
   async sendEmail (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
+
     const result: VerifierDto = await this.verifierService.sendEmail(auth, dto.to, dto.subject, dto.textBody, dto.htmlBody);
+
     return res.set({ 'x-auth-token': result.authToken }).json(result.body);
   }
 
   @Post('sendSms')
+  @UseGuards(AuthGuard)
   async sendSms (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
     const result: VerifierDto = await this.verifierService.sendSms(auth, dto.to, dto.msg);
@@ -37,6 +40,7 @@ export class VerifierController {
   }
 
   @Post('sendRequest')
+  @UseGuards(AuthGuard)
   async sendRequest (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
     const result: VerifierDto<PresentationRequestResponse> = await this.verifierService.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid);
@@ -44,6 +48,7 @@ export class VerifierController {
   }
 
   @Post('verifyNoPresentation')
+  @UseGuards(AuthGuard)
   async verifyNoPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
     const result: VerifierDto<Receipt> = await this.verifierService.verifyNoPresentation(auth, dto.noPresentation, dto.verifier);
@@ -51,6 +56,7 @@ export class VerifierController {
   }
 
   @Post('verifyPresentation')
+  @UseGuards(AuthGuard)
   async verifyPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
     const result: VerifierDto<Receipt> = await this.verifierService.verifyPresentation(auth, dto.presentation, dto.verifier);

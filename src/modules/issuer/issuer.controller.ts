@@ -11,8 +11,7 @@ import {
 import { Credential } from 'library-issuer-verifier-utility/build/types';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('issuer')
-@UseGuards(AuthGuard)
+@Controller('issuer/api')
 export class IssuerController {
   constructor (private issuerService: IssuerService) {}
 
@@ -26,6 +25,7 @@ export class IssuerController {
   }
 
   @Post('issueCredential')
+  @UseGuards(AuthGuard)
   async issueCredential (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
     const result: IssuerDto<Credential> = await this.issuerService.issueCredential(auth, dto.type, dto.issuer, dto.credentialSubject, dto.eccPrivateKey, dto.expirationDate);
@@ -33,6 +33,7 @@ export class IssuerController {
   }
 
   @Post('revokeCredential')
+  @UseGuards(AuthGuard)
   @HttpCode(200)
   async revokeCredential (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;

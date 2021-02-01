@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
 
   requireAuth = (auth: string | undefined): boolean => {
     if (!auth) {
+      Logger.error('No auth string');
       throw new UnauthorizedException('No authorization string.');
     }
 
@@ -25,6 +26,7 @@ export class AuthGuard implements CanActivate {
     const token = auth.slice(7);
 
     if (!token) {
+      Logger.error('No auth token');
       throw new UnauthorizedException('No authorization token.');
     }
 

@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+# VS Code
+.vscode/
+
 # local env vars
 .env
 
