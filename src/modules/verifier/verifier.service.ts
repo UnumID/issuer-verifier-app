@@ -6,6 +6,7 @@ import {
   sendRequest as _sendRequest,
   verifyNoPresentation as _verifyNoPresentation,
   verifyPresentation as _verifyPresentation,
+  verifyEncryptedPresentation as _verifyEncryptedPresentation,
   RegisteredVerifier,
   VerifierDto,
   Receipt,
@@ -13,6 +14,8 @@ import {
   NoPresentation,
   Presentation
 } from '@unumid/verifier-server-sdk';
+
+import { EncryptedData } from 'library-issuer-verifier-utility';
 
 @Injectable()
 export class VerifierService {
@@ -38,5 +41,9 @@ export class VerifierService {
 
   verifyPresentation (authorization: string, presentation: Presentation, verifier: string): Promise<VerifierDto<Receipt>> {
     return _verifyPresentation(authorization, presentation, verifier);
+  }
+
+  verifyEncryptedPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string): Promise<VerifierDto<Receipt>> {
+    return _verifyEncryptedPresentation(authorization, presentation, verifier, encryptionPrivateKey);
   }
 }

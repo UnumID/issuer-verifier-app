@@ -62,4 +62,12 @@ export class VerifierController {
     const result: VerifierDto<Receipt> = await this.verifierService.verifyPresentation(auth, dto.presentation, dto.verifier);
     return res.set({ 'x-auth-token': result.authToken }).json(result.body);
   }
+
+  @Post('verifyEncryptedPresentation')
+  @UseGuards(AuthGuard)
+  async verifyEncryptedPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+    const auth = req.headers.authorization;
+    const result: VerifierDto<Receipt> = await this.verifierService.verifyEncryptedPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey);
+    return res.set({ 'x-auth-token': result.authToken }).json(result.body);
+  }
 }
