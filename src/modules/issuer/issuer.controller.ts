@@ -9,7 +9,7 @@ import {
   RegisteredIssuer
 } from '@unumid/issuer-server-sdk';
 import { Credential } from 'library-issuer-verifier-utility/build/types';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../../../src/guards/auth.guard';
 
 @Controller('issuer/api')
 export class IssuerController {

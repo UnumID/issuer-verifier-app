@@ -34,9 +34,9 @@ jobs:
 
       - run: npm run lint
       
-      # - run:
-          # name: Jest Tests
-          # command: npm test
+      - run:
+          name: Jest Tests
+          command: npm test
 
   build-and-push-image:
     executor: aws-cli/default
