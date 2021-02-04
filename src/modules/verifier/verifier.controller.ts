@@ -7,7 +7,7 @@ import {
   VerifierDto,
   RegisteredVerifier
 } from '@unumid/verifier-server-sdk';
-import { AuthGuard } from '../../../src/guards/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('verifier/api')
 export class VerifierController {
