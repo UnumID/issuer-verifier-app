@@ -31,8 +31,8 @@ export class VerifierService {
     return _sendSms(authorization, to, msg);
   }
 
-  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string): Promise<VerifierDto<PresentationRequestResponse>> {
-    return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid);
+  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<VerifierDto<PresentationRequestResponse>> {
+    return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid, expirationDate, metadata);
   }
 
   verifyNoPresentation (authorization: string, noPresentation: NoPresentation, verifier: string): Promise<VerifierDto<Receipt>> {

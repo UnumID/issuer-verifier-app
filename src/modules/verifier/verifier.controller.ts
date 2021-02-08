@@ -43,7 +43,7 @@ export class VerifierController {
   @UseGuards(AuthGuard)
   async sendRequest (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
-    const result: VerifierDto<PresentationRequestResponse> = await this.verifierService.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid);
+    const result: VerifierDto<PresentationRequestResponse> = await this.verifierService.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid, dto.expirationDate, dto.metadata);
     return res.set({ 'x-auth-token': result.authToken }).json(result.body);
   }
 
