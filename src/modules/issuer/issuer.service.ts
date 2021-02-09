@@ -19,9 +19,10 @@ export class IssuerService {
     }
   }
 
-  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: Date): Promise<IssuerDto<Credential>> {
+  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: string): Promise<IssuerDto<Credential>> {
     try {
-      return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, new Date(expirationDate));
+      const expiration = expirationDate ? new Date(expirationDate) : undefined;
+      return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, expiration);
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
       throw error;
