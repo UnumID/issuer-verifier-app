@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   registerVerifier as _registerVerifier,
   sendEmail as _sendEmail,
@@ -12,8 +12,9 @@ import {
   Receipt,
   PresentationRequestResponse,
   NoPresentation,
-  Presentation
-} from '@unumid/verifier-server-sdk';
+  Presentation,
+  VerifiedStatus
+} from '@unumid/server-sdk';
 
 import { EncryptedData } from 'library-issuer-verifier-utility';
 
@@ -35,15 +36,72 @@ export class VerifierService {
     return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid, expirationDate, metadata);
   }
 
-  verifyNoPresentation (authorization: string, noPresentation: NoPresentation, verifier: string): Promise<VerifierDto<Receipt>> {
-    return _verifyNoPresentation(authorization, noPresentation, verifier);
+  async verifyNoPresentation (authorization: string, noPresentation: NoPresentation, verifier: string): Promise<VerifierDto<Receipt | VerifiedStatus>> {
+    try {
+      return await _verifyNoPresentation(authorization, noPresentation, verifier);
+    } catch (error) {
+      Logger.error('Error handling verifying no presentation request to UnumID SaaS', error);
+
+      if (error.statusCode === -1) {
+        const messages = error.message.split('#');
+        const authToken = messages[0] === 'undefined' ? undefined : messages[0];
+        const result: VerifierDto<VerifiedStatus> = {
+          authToken,
+          body: {
+            isVerified: false,
+            message: messages[1]
+          }
+        };
+        return result;
+      }
+
+      throw error;
+    }
   }
 
-  verifyPresentation (authorization: string, presentation: Presentation, verifier: string): Promise<VerifierDto<Receipt>> {
-    return _verifyPresentation(authorization, presentation, verifier);
+  async verifyPresentation (authorization: string, presentation: Presentation, verifier: string): Promise<VerifierDto<Receipt | VerifiedStatus>> {
+    try {
+      return await _verifyPresentation(authorization, presentation, verifier);
+    } catch (error) {
+      Logger.error('Error handling verify presentation request to UnumID Saas.', error);
+
+      if (error.statusCode === -1) {
+        const messages = error.message.split('#');
+        const authToken = messages[0] === 'undefined' ? undefined : messages[0];
+        const result: VerifierDto<VerifiedStatus> = {
+          authToken,
+          body: {
+            isVerified: false,
+            message: messages[1]
+          }
+        };
+        return result;
+      }
+
+      throw error;
+    }
   }
 
-  verifyEncryptedPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string): Promise<VerifierDto<Receipt>> {
-    return _verifyEncryptedPresentation(authorization, presentation, verifier, encryptionPrivateKey);
+  async verifyEncryptedPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string): Promise<VerifierDto<Receipt | VerifiedStatus>> {
+    try {
+      return await _verifyEncryptedPresentation(authorization, presentation, verifier, encryptionPrivateKey);
+    } catch (error) {
+      Logger.error('Error handling verifying encrypted presentation request to UnumID Saas.', error);
+
+      if (error.statusCode === -1) {
+        const messages = error.message.split('#');
+        const authToken = messages[0] === 'undefined' ? undefined : messages[0];
+        const result: VerifierDto<VerifiedStatus> = {
+          authToken,
+          body: {
+            isVerified: false,
+            message: messages[1]
+          }
+        };
+        return result;
+      }
+
+      throw error;
+    }
   }
 }

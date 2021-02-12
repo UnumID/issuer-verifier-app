@@ -5,8 +5,9 @@ import {
   Receipt,
   PresentationRequestResponse,
   VerifierDto,
-  RegisteredVerifier
-} from '@unumid/verifier-server-sdk';
+  RegisteredVerifier,
+  VerifiedStatus
+} from '@unumid/server-sdk';
 import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('verifier/api')
@@ -51,7 +52,7 @@ export class VerifierController {
   @UseGuards(AuthGuard)
   async verifyNoPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
-    const result: VerifierDto<Receipt> = await this.verifierService.verifyNoPresentation(auth, dto.noPresentation, dto.verifier);
+    const result: VerifierDto<Receipt | VerifiedStatus> = await this.verifierService.verifyNoPresentation(auth, dto.noPresentation, dto.verifier);
     return res.set({ 'x-auth-token': result.authToken }).json(result.body);
   }
 
@@ -59,7 +60,7 @@ export class VerifierController {
   @UseGuards(AuthGuard)
   async verifyPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
-    const result: VerifierDto<Receipt> = await this.verifierService.verifyPresentation(auth, dto.presentation, dto.verifier);
+    const result: VerifierDto<Receipt | VerifiedStatus> = await this.verifierService.verifyPresentation(auth, dto.presentation, dto.verifier);
     return res.set({ 'x-auth-token': result.authToken }).json(result.body);
   }
 
@@ -67,7 +68,7 @@ export class VerifierController {
   @UseGuards(AuthGuard)
   async verifyEncryptedPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     const auth = req.headers.authorization;
-    const result: VerifierDto<Receipt> = await this.verifierService.verifyEncryptedPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey);
+    const result: VerifierDto<Receipt | VerifiedStatus> = await this.verifierService.verifyEncryptedPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey);
     return res.set({ 'x-auth-token': result.authToken }).json(result.body);
   }
 }

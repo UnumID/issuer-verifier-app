@@ -2,12 +2,9 @@ import { Body, Controller, HttpCode, Post, Response, Request, UseGuards } from '
 import { Response as Res, Request as Req } from 'express';
 import { IssuerService } from './issuer.service';
 import {
-  issueCredential as _issueCredential,
-  revokeCredential as _revokeCredential,
-  registerIssuer as _registerIssuer,
   IssuerDto,
   RegisteredIssuer
-} from '@unumid/issuer-server-sdk';
+} from '@unumid/server-sdk';
 import { Credential } from 'library-issuer-verifier-utility/build/types';
 import { AuthGuard } from '../../guards/auth.guard';
 
