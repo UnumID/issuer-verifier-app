@@ -3,14 +3,14 @@ import {
   issueCredential as _issueCredential,
   revokeCredential as _revokeCredential,
   registerIssuer as _registerIssuer,
-  IssuerDto,
+  UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
 import { CredentialSubject, Credential } from 'library-issuer-verifier-utility/build/types';
 
 @Injectable()
 export class IssuerService {
-  registerIssuer (name: string, customerUuid: string, apiKey: string): Promise<IssuerDto<RegisteredIssuer>> {
+  registerIssuer (name: string, customerUuid: string, apiKey: string): Promise<UnumDto<RegisteredIssuer>> {
     try {
       return _registerIssuer(name, customerUuid, apiKey);
     } catch (error) {
@@ -19,7 +19,7 @@ export class IssuerService {
     }
   }
 
-  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: string): Promise<IssuerDto<Credential>> {
+  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: string): Promise<UnumDto<Credential>> {
     try {
       const expiration = expirationDate ? new Date(expirationDate) : undefined;
       return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, expiration);
@@ -29,7 +29,7 @@ export class IssuerService {
     }
   }
 
-  revokeCredential (authorization: string, credentialId: string): Promise<IssuerDto<Credential>> {
+  revokeCredential (authorization: string, credentialId: string): Promise<UnumDto<Credential>> {
     try {
       return _revokeCredential(authorization, credentialId);
     } catch (error) {
