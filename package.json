@@ -36,7 +36,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@unumid/server-sdk": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#v0.1.0",
+    "@unumid/server-sdk": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#v0.4.0",
     "@nestjs/common": "^7.5.1",
     "@nestjs/config": "^0.6.1",
     "@nestjs/core": "^7.5.1",

@@ -6,7 +6,7 @@ import {
   UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
-import { CredentialSubject, Credential } from 'library-issuer-verifier-utility/build/types';
+import { CredentialSubject, Credential } from '@unumid/library-issuer-verifier-utility/build/types';
 
 @Injectable()
 export class IssuerService {

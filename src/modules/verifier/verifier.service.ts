@@ -16,7 +16,7 @@ import {
 } from '@unumid/server-sdk';
 import { DecryptedPresentation } from '@unumid/server-sdk/build/types';
 
-import { EncryptedData } from 'library-issuer-verifier-utility';
+import { EncryptedData } from '@unumid/library-issuer-verifier-utility';
 
 @Injectable()
 export class VerifierService {
