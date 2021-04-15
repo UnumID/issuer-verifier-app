@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
   issueCredential as _issueCredential,
-  revokeCredential as _revokeCredential,
+  updateCredentialStatus as _updateCredentialStatus,
   registerIssuer as _registerIssuer,
   UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
-import { CredentialSubject, Credential } from '@unumid/library-issuer-verifier-utility/build/types';
+import { CredentialSubject, Credential } from '@unumid/types';
 
 @Injectable()
 export class IssuerService {
@@ -31,7 +31,7 @@ export class IssuerService {
 
   revokeCredential (authorization: string, credentialId: string): Promise<UnumDto<Credential>> {
     try {
-      return _revokeCredential(authorization, credentialId);
+      return _updateCredentialStatus(authorization, credentialId);
     } catch (error) {
       Logger.error(`Error using UnumID SDK revokeCredential ${error}`);
       throw error;

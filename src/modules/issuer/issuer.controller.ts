@@ -5,7 +5,7 @@ import {
   UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
-import { Credential } from '@unumid/library-issuer-verifier-utility/build/types';
+import { Credential } from '@unumid/types';
 import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('issuer/api')

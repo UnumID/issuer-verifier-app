@@ -2,13 +2,12 @@ import { Body, Controller, Post, Response, Request, UseGuards } from '@nestjs/co
 import { VerifierService } from './verifier.service';
 import { Response as Res, Request as Req } from 'express';
 import {
-  PresentationRequestResponse,
   UnumDto,
-  RegisteredVerifier,
-  VerifiedStatus
+  RegisteredVerifier
 } from '@unumid/server-sdk';
 import { AuthGuard } from '../../guards/auth.guard';
 import { DecryptedPresentation } from '@unumid/server-sdk/build/types';
+import { PresentationRequestPostDto } from '@unumid/types';
 
 @Controller('verifier/api')
 export class VerifierController {
@@ -32,7 +31,7 @@ export class VerifierController {
   async sendEmail (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     try {
       const auth = req.headers.authorization;
-      const result: UnumDto = await this.verifierService.sendEmail(auth, dto.to, dto.subject, dto.textBody, dto.htmlBody);
+      const result: UnumDto = await this.verifierService.sendEmail(auth, dto.to, dto.deeplink);
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
       res.status(400);
@@ -58,20 +57,7 @@ export class VerifierController {
   async sendRequest (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     try {
       const auth = req.headers.authorization;
-      const result: UnumDto<PresentationRequestResponse> = await this.verifierService.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid, dto.expirationDate, dto.metadata);
-      return res.set({ 'x-auth-token': result.authToken }).json(result.body);
-    } catch (error) {
-      res.status(400);
-      return res.json(error);
-    }
-  }
-
-  @Post('verifyNoPresentation')
-  @UseGuards(AuthGuard)
-  async verifyNoPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
-    try {
-      const auth = req.headers.authorization;
-      const result: UnumDto<VerifiedStatus> = await this.verifierService.verifyNoPresentation(auth, dto.noPresentation, dto.verifier);
+      const result: UnumDto<PresentationRequestPostDto> = await this.verifierService.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid, dto.expirationDate, dto.metadata);
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
       res.status(400);
@@ -81,23 +67,10 @@ export class VerifierController {
 
   @Post('verifyPresentation')
   @UseGuards(AuthGuard)
-  async verifyPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
-    try {
-      const auth = req.headers.authorization;
-      const result: UnumDto<VerifiedStatus> = await this.verifierService.verifyPresentation(auth, dto.presentation, dto.verifier);
-      return res.set({ 'x-auth-token': result.authToken }).json(result.body);
-    } catch (error) {
-      res.status(400);
-      return res.json(error);
-    }
-  }
-
-  @Post('verifyEncryptedPresentation')
-  @UseGuards(AuthGuard)
   async verifyEncryptedPresentation (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     try {
       const auth = req.headers.authorization;
-      const result: UnumDto<DecryptedPresentation> = await this.verifierService.verifyEncryptedPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey);
+      const result: UnumDto<DecryptedPresentation> = await this.verifierService.verifyPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey, dto.presentationRequest);
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
       res.status(400);

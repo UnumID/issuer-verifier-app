@@ -4,19 +4,12 @@ import {
   sendEmail as _sendEmail,
   sendSms as _sendSms,
   sendRequest as _sendRequest,
-  verifyNoPresentation as _verifyNoPresentation,
   verifyPresentation as _verifyPresentation,
-  verifyEncryptedPresentation as _verifyEncryptedPresentation,
   RegisteredVerifier,
   UnumDto,
-  PresentationRequestResponse,
-  NoPresentation,
-  Presentation,
-  VerifiedStatus
+  DecryptedPresentation
 } from '@unumid/server-sdk';
-import { DecryptedPresentation } from '@unumid/server-sdk/build/types';
-
-import { EncryptedData } from '@unumid/library-issuer-verifier-utility';
+import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types';
 
 @Injectable()
 export class VerifierService {
@@ -29,25 +22,25 @@ export class VerifierService {
     }
   }
 
-  sendEmail (authorization: string, to: string, subject: string, textBody: string, htmlBody: string): Promise<UnumDto> {
+  sendEmail (authorization: string, to: string, deeplink: string): Promise<UnumDto> {
     try {
-      return _sendEmail(authorization, to, subject, textBody, htmlBody);
+      return _sendEmail(authorization, to, deeplink);
     } catch (error) {
       Logger.error('Error handling sendEmail to UnumID SaaS', error);
       throw error;
     }
   }
 
-  sendSms (authorization: string, to: string, msg: string): Promise<UnumDto> {
+  sendSms (authorization: string, to: string, deeplink: string): Promise<UnumDto> {
     try {
-      return _sendSms(authorization, to, msg);
+      return _sendSms(authorization, to, deeplink);
     } catch (error) {
       Logger.error('Error handling sendSms to UnumID SaaS', error);
       throw error;
     }
   }
 
-  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestResponse>> {
+  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestPostDto>> {
     try {
       return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid, expirationDate, metadata);
     } catch (error) {
@@ -56,27 +49,9 @@ export class VerifierService {
     }
   }
 
-  async verifyNoPresentation (authorization: string, noPresentation: NoPresentation, verifier: string): Promise<UnumDto<VerifiedStatus>> {
+  async verifyPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string, presentationRequest?: PresentationRequestDto): Promise<UnumDto<DecryptedPresentation>> {
     try {
-      return await _verifyNoPresentation(authorization, noPresentation, verifier);
-    } catch (error) {
-      Logger.error('Error handling verifying no presentation request to UnumID SaaS', error);
-      throw error;
-    }
-  }
-
-  async verifyPresentation (authorization: string, presentation: Presentation, verifier: string): Promise<UnumDto<VerifiedStatus>> {
-    try {
-      return await _verifyPresentation(authorization, presentation, verifier);
-    } catch (error) {
-      Logger.error('Error handling verify presentation request to UnumID Saas.', error);
-      throw error;
-    }
-  }
-
-  async verifyEncryptedPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string): Promise<UnumDto<DecryptedPresentation>> {
-    try {
-      return await _verifyEncryptedPresentation(authorization, presentation, verifier, encryptionPrivateKey);
+      return await _verifyPresentation(authorization, presentation, verifier, encryptionPrivateKey, presentationRequest);
     } catch (error) {
       Logger.error('Error handling verifying encrypted presentation request to UnumID Saas.', error);
       throw error;
