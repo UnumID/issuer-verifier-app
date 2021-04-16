@@ -5,7 +5,7 @@ import {
   UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
-import { Credential } from '@unumid/library-issuer-verifier-utility/build/types';
+import { Credential } from '@unumid/types';
 import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('issuer/api')
@@ -39,13 +39,13 @@ export class IssuerController {
     }
   }
 
-  @Post('revokeCredential')
+  @Post('updateCredentialStatus')
   @UseGuards(AuthGuard)
   @HttpCode(200)
   async revokeCredential (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     try {
       const auth = req.headers.authorization;
-      const result: UnumDto<Credential> = await this.issuerService.revokeCredential(auth, dto.credentialId);
+      const result: UnumDto<Credential> = await this.issuerService.updateCredentialStatus(auth, dto.credentialId, dto.status);
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
       res.status(400);
