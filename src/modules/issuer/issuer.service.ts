@@ -30,7 +30,7 @@ export class IssuerService {
   }
 
   updateCredentialStatus (authorization: string, credentialId: string, status: CredentialStatusOptions = 'revoked'): Promise<UnumDto<Credential>> {
-    Logger.debug(`Updating credential ${credentialId} with status ${status}.`);
+    Logger.debug(`Updating credential ${credentialId} to status ${status}.`);
 
     try {
       return _updateCredentialStatus(authorization, credentialId, status);
