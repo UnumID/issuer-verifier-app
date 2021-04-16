@@ -6,7 +6,7 @@ import {
   UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
-import { CredentialSubject, Credential } from '@unumid/types';
+import { CredentialSubject, Credential, CredentialStatusOptions } from '@unumid/types';
 
 @Injectable()
 export class IssuerService {
@@ -29,9 +29,11 @@ export class IssuerService {
     }
   }
 
-  revokeCredential (authorization: string, credentialId: string): Promise<UnumDto<Credential>> {
+  updateCredentialStatus (authorization: string, credentialId: string, status: CredentialStatusOptions = 'revoked'): Promise<UnumDto<Credential>> {
+    Logger.debug(`Updating credential ${credentialId} with status ${status}.`);
+
     try {
-      return _updateCredentialStatus(authorization, credentialId);
+      return _updateCredentialStatus(authorization, credentialId, status);
     } catch (error) {
       Logger.error(`Error using UnumID SDK revokeCredential ${error}`);
       throw error;
