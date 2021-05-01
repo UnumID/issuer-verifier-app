@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
 
   requireAuth = (auth: string | undefined): boolean => {
     if (!auth) {
-      Logger.error('No auth string');
+      Logger.error('No authorization header');
       throw new UnauthorizedException('No authorization string.');
     }
 

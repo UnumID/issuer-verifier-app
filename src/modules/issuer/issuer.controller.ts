@@ -7,7 +7,9 @@ import {
 } from '@unumid/server-sdk';
 import { Credential } from '@unumid/types';
 import { AuthGuard } from '../../guards/auth.guard';
+import { VersionGuard } from 'src/guards/version.guard';
 
+@UseGuards(VersionGuard)
 @Controller('issuer/api')
 export class IssuerController {
   constructor (private issuerService: IssuerService) {}

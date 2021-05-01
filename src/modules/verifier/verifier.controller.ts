@@ -8,7 +8,9 @@ import {
 import { AuthGuard } from '../../guards/auth.guard';
 import { DecryptedPresentation } from '@unumid/server-sdk/build/types';
 import { PresentationRequestPostDto } from '@unumid/types';
+import { VersionGuard } from 'src/guards/version.guard';
 
+@UseGuards(VersionGuard)
 @Controller('verifier/api')
 export class VerifierController {
   constructor (private verifierService: VerifierService) {}
