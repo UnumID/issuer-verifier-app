@@ -1,5 +1,6 @@
 import { BadRequestException, CanActivate, ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { valid } from 'semver';
 
 @Injectable()
 export class VersionGuard implements CanActivate {
@@ -16,8 +17,13 @@ export class VersionGuard implements CanActivate {
 
   requireAuth = (version: string | undefined): boolean => {
     if (!version) {
-      Logger.error('No version header');
+      Logger.error('No version header.');
       throw new BadRequestException('Version header required.');
+    }
+
+    if (!valid(version)) {
+      Logger.error('Version header is not in valid semver notation syntax.');
+      throw new BadRequestException('Version header is not in valid semver notation syntax.');
     }
 
     Logger.log(`Request made with version ${version}`);
