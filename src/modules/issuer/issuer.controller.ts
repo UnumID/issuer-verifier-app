@@ -2,8 +2,8 @@ import { Body, Controller, HttpCode, Post, Response, Request, UseGuards } from '
 import { Response as Res, Request as Req } from 'express';
 import { IssuerService } from './issuer.service';
 import { AuthGuard } from '../../guards/auth.guard';
-import { VersionGuard } from 'src/guards/version.guard';
-import { IssuerV2Service } from 'src/issuer-v2/issuer-v2.service';
+import { VersionGuard } from '../../guards/version.guard';
+import { IssuerV2Service } from '../../issuer-v2/issuer-v2.service';
 import { lt } from 'semver';
 
 @UseGuards(VersionGuard)

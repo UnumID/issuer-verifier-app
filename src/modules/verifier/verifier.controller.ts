@@ -2,9 +2,9 @@ import { Body, Controller, Post, Response, Request, UseGuards } from '@nestjs/co
 import { VerifierService } from './verifier.service';
 import { Response as Res, Request as Req } from 'express';
 import { AuthGuard } from '../../guards/auth.guard';
-import { VersionGuard } from 'src/guards/version.guard';
+import { VersionGuard } from '../../guards/version.guard';
 import { lt } from 'semver';
-import { VerifierV2Service } from 'src/verifier-v2/verifier-v2.service';
+import { VerifierV2Service } from '../../verifier-v2/verifier-v2.service';
 
 @UseGuards(VersionGuard)
 @Controller('verifier/api')
