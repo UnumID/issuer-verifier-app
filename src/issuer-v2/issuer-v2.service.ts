@@ -5,11 +5,11 @@ import {
   registerIssuer as _registerIssuer,
   UnumDto,
   RegisteredIssuer
-} from '@unumid/server-sdk-deprecated';
-import { CredentialSubject, Credential, CredentialStatusOptions } from '@unumid/types-deprecated';
+} from '@unumid/server-sdk';
+import { CredentialSubject, Credential, CredentialStatusOptions } from '@unumid/types';
 
 @Injectable()
-export class IssuerService {
+export class IssuerV2Service {
   registerIssuer (name: string, customerUuid: string, apiKey: string): Promise<UnumDto<RegisteredIssuer>> {
     try {
       return _registerIssuer(name, customerUuid, apiKey);

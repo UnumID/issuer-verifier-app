@@ -36,17 +36,20 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@unumid/server-sdk": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#1.4.0",
-    "@unumid/types": "git+ssh://git@github.com/UnumID/types.git#1.4.1",
     "@nestjs/common": "^7.5.1",
     "@nestjs/config": "^0.6.1",
     "@nestjs/core": "^7.5.1",
     "@nestjs/platform-express": "^7.5.1",
+    "@unumid/server-sdk": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#2.0.0",
+    "@unumid/server-sdk-deprecated": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#1.4.0",
+    "@unumid/types": "git+ssh://git@github.com/UnumID/types.git#2.0.0",
+    "@unumid/types-deprecated": "git+ssh://git@github.com/UnumID/types.git#1.4.1",
     "node-fetch": "^2.6.1",
     "readme-md-generator": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.3",
+    "semver": "^7.3.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.1",
