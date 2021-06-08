@@ -5,7 +5,7 @@ import {
   registerIssuer as _registerIssuer,
   UnumDto,
   RegisteredIssuer
-} from '@unumid/server-sdk-deprecated';
+} from '@unumid/server-sdk-deprecated-v1';
 import { CredentialSubject, Credential, CredentialStatusOptions } from '@unumid/types-deprecated';
 
 @Injectable()
