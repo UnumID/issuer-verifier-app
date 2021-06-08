@@ -3,9 +3,9 @@ import { Response as Res, Request as Req } from 'express';
 import { IssuerService } from './issuer.service';
 import { AuthGuard } from '../../guards/auth.guard';
 import { VersionGuard } from '../../guards/version.guard';
-import { IssuerV2Service } from '../../issuer-v2/issuer-v2.service';
+import { IssuerV2Service } from './issuer-v2/issuer-v2.service';
 import { lt } from 'semver';
-import { IssuerV3Service } from '../../issuer-v3/issuer-v3.service';
+import { IssuerV3Service } from './issuer-v3/issuer-v3.service';
 
 @UseGuards(VersionGuard)
 @Controller('issuer/api')

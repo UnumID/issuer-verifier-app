@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { VerifierV3Service } from '../../verifier-v3/verifier-v3.service';
-import { VerifierV2Service } from '../../verifier-v2/verifier-v2.service';
+import { VerifierV3Service } from './verifier-v3/verifier-v3.service';
+import { VerifierV2Service } from './verifier-v2/verifier-v2.service';
 import { VerifierController } from './verifier.controller';
 import { VerifierService } from './verifier.service';
 

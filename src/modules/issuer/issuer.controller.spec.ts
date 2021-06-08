@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IssuerV3Service } from '../../issuer-v3/issuer-v3.service';
-import { IssuerV2Service } from '../../issuer-v2/issuer-v2.service';
+import { IssuerV3Service } from './issuer-v3/issuer-v3.service';
+import { IssuerV2Service } from '../../services/issuer-v2/issuer-v2.service';
 import { IssuerController } from './issuer.controller';
 import { IssuerService } from './issuer.service';
 
