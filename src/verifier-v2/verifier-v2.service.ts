@@ -8,7 +8,7 @@ import {
   RegisteredVerifier,
   UnumDto,
   DecryptedPresentation
-} from '@unumid/server-sdk';
+} from '@unumid/server-sdk-deprecated-v2';
 import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types-deprecated-v2';
 
 @Injectable()
