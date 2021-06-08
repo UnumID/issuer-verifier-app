@@ -9,6 +9,7 @@ import { VerifierModule } from './modules/verifier/verifier.module';
 import { VerifierV2Service } from './verifier-v2/verifier-v2.service';
 import { IssuerV2Service } from './issuer-v2/issuer-v2.service';
 import { VerifierV3Service } from './verifier-v3/verifier-v3.service';
+import { IssuerV3Service } from './issuer-v3/issuer-v3.service';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { VerifierV3Service } from './verifier-v3/verifier-v3.service';
     IssuerModule,
     VerifierModule,
     HealthModule],
-  // providers: [AuthGuard, VersionGuard, VerifierV2Service, IssuerV2Service, VerifierV3Service]
+  // providers: [AuthGuard, VersionGuard, VerifierV2Service, IssuerV2Service, VerifierV3Service, IssuerV3Service]
   providers: [AuthGuard, VersionGuard]
 })
 export class AppModule {}

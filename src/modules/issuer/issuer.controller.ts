@@ -5,11 +5,12 @@ import { AuthGuard } from '../../guards/auth.guard';
 import { VersionGuard } from '../../guards/version.guard';
 import { IssuerV2Service } from '../../issuer-v2/issuer-v2.service';
 import { lt } from 'semver';
+import { IssuerV3Service } from '../../issuer-v3/issuer-v3.service';
 
 @UseGuards(VersionGuard)
 @Controller('issuer/api')
 export class IssuerController {
-  constructor (private issuerService: IssuerService, private issuerV2Service: IssuerV2Service) {}
+  constructor (private issuerService: IssuerService, private issuerV2Service: IssuerV2Service, private issuerV3Service: IssuerV3Service) {}
 
   // todo and real types to these requests
   @Post('register')
@@ -19,8 +20,10 @@ export class IssuerController {
       let result;
       if (lt(req.headers.version as string, '2.0.0')) {
         result = await this.issuerService.registerIssuer(dto.name, dto.customerUuid, dto.apiKey);
-      } else {
+      } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.issuerV2Service.registerIssuer(dto.name, dto.customerUuid, dto.apiKey);
+      } else {
+        result = await this.issuerV3Service.registerIssuer(dto.name, dto.customerUuid, dto.apiKey);
       }
 
       // todo figure out the more elegant NestJS way of doing this.
@@ -40,8 +43,10 @@ export class IssuerController {
       let result;
       if (lt(req.headers.version as string, '2.0.0')) {
         result = await this.issuerService.issueCredential(auth, dto.type, dto.issuer, dto.credentialSubject, dto.eccPrivateKey, dto.expirationDate);
-      } else {
+      } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.issuerV2Service.issueCredential(auth, dto.type, dto.issuer, dto.credentialSubject, dto.eccPrivateKey, dto.expirationDate);
+      } else {
+        result = await this.issuerV3Service.issueCredential(auth, dto.type, dto.issuer, dto.credentialSubject, dto.eccPrivateKey, dto.expirationDate);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
@@ -61,8 +66,10 @@ export class IssuerController {
       let result;
       if (lt(req.headers.version as string, '2.0.0')) {
         result = await this.issuerService.updateCredentialStatus(auth, dto.credentialId, dto.status);
-      } else {
+      } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.issuerV2Service.updateCredentialStatus(auth, dto.credentialId, dto.status);
+      } else {
+        result = await this.issuerV3Service.updateCredentialStatus(auth, dto.credentialId, dto.status);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);

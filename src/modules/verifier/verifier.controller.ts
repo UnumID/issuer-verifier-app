@@ -5,7 +5,7 @@ import { AuthGuard } from '../../guards/auth.guard';
 import { VersionGuard } from '../../guards/version.guard';
 import { lt } from 'semver';
 import { VerifierV2Service } from '../../verifier-v2/verifier-v2.service';
-import { VerifierV3Service } from 'src/verifier-v3/verifier-v3.service';
+import { VerifierV3Service } from '../../verifier-v3/verifier-v3.service';
 
 @UseGuards(VersionGuard)
 @Controller('verifier/api')
