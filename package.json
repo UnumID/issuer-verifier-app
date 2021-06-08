@@ -43,7 +43,7 @@
     "@unumid/server-sdk": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#2.0.2",
     "@unumid/server-sdk-deprecated-v1": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#1.4.0",
     "@unumid/types": "git+ssh://git@github.com/UnumID/types.git#2.1.0",
-    "@unumid/types-deprecated": "git+ssh://git@github.com/UnumID/types.git#1.4.1",
+    "@unumid/types-deprecated-v1": "git+ssh://git@github.com/UnumID/types.git#1.4.1",
     "node-fetch": "^2.6.1",
     "readme-md-generator": "^1.0.0",
     "reflect-metadata": "^0.1.13",

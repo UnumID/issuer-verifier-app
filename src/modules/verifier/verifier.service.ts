@@ -9,7 +9,7 @@ import {
   UnumDto,
   DecryptedPresentation
 } from '@unumid/server-sdk-deprecated-v1';
-import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types-deprecated';
+import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types-deprecated-v1';
 
 @Injectable()
 export class VerifierService {
