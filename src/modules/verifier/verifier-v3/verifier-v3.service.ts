@@ -12,7 +12,7 @@ import {
 import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types';
 
 @Injectable()
-export class VerifierV2Service {
+export class VerifierV3Service {
   registerVerifier (name: string, customerUuid: string, url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
     try {
       return _registerVerifier(name, customerUuid, url, apiKey);

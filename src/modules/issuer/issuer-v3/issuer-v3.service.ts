@@ -5,11 +5,11 @@ import {
   registerIssuer as _registerIssuer,
   UnumDto,
   RegisteredIssuer
-} from '@unumid/server-sdk-deprecated-v1';
-import { CredentialSubject, Credential, CredentialStatusOptions } from '@unumid/types-deprecated-v1';
+} from '@unumid/server-sdk';
+import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb } from '@unumid/types';
 
 @Injectable()
-export class IssuerService {
+export class IssuerV3Service {
   registerIssuer (name: string, customerUuid: string, apiKey: string): Promise<UnumDto<RegisteredIssuer>> {
     try {
       return _registerIssuer(name, customerUuid, apiKey);
@@ -19,7 +19,7 @@ export class IssuerService {
     }
   }
 
-  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: string): Promise<UnumDto<Credential>> {
+  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: string): Promise<UnumDto<CredentialPb>> {
     try {
       const expiration = expirationDate ? new Date(expirationDate) : undefined;
       return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, expiration);

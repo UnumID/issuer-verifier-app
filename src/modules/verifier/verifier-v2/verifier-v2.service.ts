@@ -8,11 +8,11 @@ import {
   RegisteredVerifier,
   UnumDto,
   DecryptedPresentation
-} from '@unumid/server-sdk-deprecated-v1';
-import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types-deprecated-v1';
+} from '@unumid/server-sdk-deprecated-v2';
+import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types-deprecated-v2';
 
 @Injectable()
-export class VerifierService {
+export class VerifierV2Service {
   registerVerifier (name: string, customerUuid: string, url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
     try {
       return _registerVerifier(name, customerUuid, url, apiKey);
