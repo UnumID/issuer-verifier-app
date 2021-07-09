@@ -63,11 +63,11 @@ export class VerifierController {
 
       let result;
       if (lt(req.headers.version as string, '2.0.0')) {
-        result = await this.verifierService.sendSms(auth, dto.to, dto.msg);
+        result = await this.verifierService.sendSms(auth, dto.to, dto.deeplink);
       } else if (lt(req.headers.version as string, '3.0.0')) {
-        result = await this.verifierV2Service.sendSms(auth, dto.to, dto.msg);
+        result = await this.verifierV2Service.sendSms(auth, dto.to, dto.deeplink);
       } else {
-        result = await this.verifierV3Service.sendSms(auth, dto.to, dto.msg);
+        result = await this.verifierV3Service.sendSms(auth, dto.to, dto.deeplink);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
