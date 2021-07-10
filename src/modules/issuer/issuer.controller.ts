@@ -29,6 +29,14 @@ export class IssuerController {
       // todo figure out the more elegant NestJS way of doing this.
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
+      if (error.name === 'CustError') {
+        res.status(error.code);
+        return res.json({
+          name: 'CustomError',
+          message: error.message
+        });
+      }
+
       res.status(400);
       return res.json(error);
     }
@@ -51,6 +59,14 @@ export class IssuerController {
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
+      if (error.name === 'CustError') {
+        res.status(error.code);
+        return res.json({
+          name: 'CustomError',
+          message: error.message
+        });
+      }
+
       res.status(400);
       return res.json(error);
     }
@@ -74,6 +90,14 @@ export class IssuerController {
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
+      if (error.name === 'CustError') {
+        res.status(error.code);
+        return res.json({
+          name: 'CustomError',
+          message: error.message
+        });
+      }
+
       res.status(400);
       return res.json(error);
     }
