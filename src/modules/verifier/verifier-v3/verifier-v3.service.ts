@@ -13,9 +13,9 @@ import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } fro
 
 @Injectable()
 export class VerifierV3Service {
-  registerVerifier (name: string, customerUuid: string, url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
+  registerVerifier (customerUuid: string, url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
     try {
-      return _registerVerifier(name, customerUuid, url, apiKey);
+      return _registerVerifier(customerUuid, url, apiKey);
     } catch (error) {
       Logger.error('Error handling registerVerifier with UnumID SaaS', error);
       throw error;

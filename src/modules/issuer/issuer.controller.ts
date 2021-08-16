@@ -23,7 +23,7 @@ export class IssuerController {
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.issuerV2Service.registerIssuer(dto.name, dto.customerUuid, dto.apiKey);
       } else {
-        result = await this.issuerV3Service.registerIssuer(dto.name, dto.customerUuid, dto.apiKey);
+        result = await this.issuerV3Service.registerIssuer(dto.customerUuid, dto.apiKey);
       }
 
       // todo figure out the more elegant NestJS way of doing this.
