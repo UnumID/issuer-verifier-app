@@ -22,7 +22,7 @@ export class VerifierController {
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.verifierV2Service.registerVerifier(dto.name, dto.customerUuid, dto.url, dto.apiKey);
       } else {
-        result = await this.verifierV3Service.registerVerifier(dto.name, dto.customerUuid, dto.url, dto.apiKey);
+        result = await this.verifierV3Service.registerVerifier(dto.customerUuid, dto.url, dto.apiKey);
       }
 
       // todo figure out the more elegant NestJS way of doing this.

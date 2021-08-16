@@ -10,9 +10,9 @@ import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb } 
 
 @Injectable()
 export class IssuerV3Service {
-  registerIssuer (name: string, customerUuid: string, apiKey: string): Promise<UnumDto<RegisteredIssuer>> {
+  registerIssuer (customerUuid: string, apiKey: string): Promise<UnumDto<RegisteredIssuer>> {
     try {
-      return _registerIssuer(name, customerUuid, apiKey);
+      return _registerIssuer(customerUuid, apiKey);
     } catch (error) {
       Logger.error(`Error using UnumID SDK registerIssuer ${error}`);
       throw error;
