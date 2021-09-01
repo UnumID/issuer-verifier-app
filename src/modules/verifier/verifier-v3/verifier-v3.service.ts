@@ -5,9 +5,11 @@ import {
   sendSms as _sendSms,
   sendRequest as _sendRequest,
   verifyPresentation as _verifyPresentation,
+  checkCredentialStatus as _checkCredentialStatus,
   RegisteredVerifier,
   UnumDto,
-  DecryptedPresentation
+  DecryptedPresentation,
+  CredentialStatusInfo
 } from '@unumid/server-sdk';
 import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types';
 
@@ -54,6 +56,15 @@ export class VerifierV3Service {
       return await _verifyPresentation(authorization, presentation, verifier, encryptionPrivateKey, presentationRequest);
     } catch (error) {
       Logger.error('Error handling verifying encrypted presentation request to UnumID Saas.', error);
+      throw error;
+    }
+  }
+
+  checkCredentialStatus (authorization: string, credentialId: string): Promise<UnumDto<CredentialStatusInfo>> {
+    try {
+      return _checkCredentialStatus(authorization, credentialId);
+    } catch (error) {
+      Logger.error('Error handling checking credential status request to UnumID Saas.', error);
       throw error;
     }
   }
