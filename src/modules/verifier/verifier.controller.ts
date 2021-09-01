@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Response, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Response, Request, UseGuards, Get, Param } from '@nestjs/common';
 import { VerifierService } from './verifier.service';
 import { Response as Res, Request as Req } from 'express';
 import { AuthGuard } from '../../guards/auth.guard';
@@ -160,19 +160,19 @@ export class VerifierController {
     }
   }
 
-  @Post('checkCredentialStatus')
+  @Get('checkCredentialStatus/:id')
   @UseGuards(AuthGuard)
-  async checkCredentialStatus (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+  async checkCredentialStatus (@Request() req: Req, @Param() params: any, @Response() res: Res) {
     try {
       const auth = req.headers.authorization;
 
       let result;
       if (lt(req.headers.version as string, '2.0.0')) {
-        result = await this.verifierService.checkCredentialStatus(auth, dto.credentialId);
+        result = await this.verifierService.checkCredentialStatus(auth, params.id);
       } else if (lt(req.headers.version as string, '3.0.0')) {
-        result = await this.verifierService.checkCredentialStatus(auth, dto.credentialId);
+        result = await this.verifierService.checkCredentialStatus(auth, params.id);
       } else {
-        result = await this.verifierService.checkCredentialStatus(auth, dto.credentialId);
+        result = await this.verifierService.checkCredentialStatus(auth, params.id);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
