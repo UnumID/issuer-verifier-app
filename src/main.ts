@@ -13,8 +13,8 @@ async function bootstrap () {
 
   await app.listen(port);
 
-  Logger.debug(`Backend app started on port: ${port}`);
-  Logger.debug(`Backend app started with log level: ${configService.get('logLevel')}`);
-  Logger.debug(`Backend app pointed at UnumID SaaS url: ${configService.get('saasUrl')}`);
+  Logger.debug(`IV app started on port: ${port}`);
+  Logger.debug(`IV app started with log level: ${configService.get('logLevel')}`);
+  Logger.debug(`IV app pointed at UnumID SaaS url: ${configService.get('saasUrl')}`);
 }
 bootstrap();
