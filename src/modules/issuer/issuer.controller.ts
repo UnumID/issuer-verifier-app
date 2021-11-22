@@ -102,4 +102,33 @@ export class IssuerController {
       return res.json(error);
     }
   }
+
+  @Post('verifySubjectCredentialRequests')
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  async verifySubjectCredentialRequests (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+    try {
+      const auth = req.headers.authorization;
+
+      let result;
+      if (lt(req.headers.version as string, '3.0.0')) {
+        throw new Error('Not supported');
+      } else {
+        result = await this.issuerV3Service.verifySubjectCredentialRequests(auth, dto.issuerDid, dto.subjectCredentialRequests);
+      }
+
+      return res.set({ 'x-auth-token': result.authToken }).json(result.body);
+    } catch (error) {
+      if (error.name === 'CustError') {
+        res.status(error.code);
+        return res.json({
+          name: 'CustomError',
+          message: error.message
+        });
+      }
+
+      res.status(400);
+      return res.json(error);
+    }
+  }
 }
