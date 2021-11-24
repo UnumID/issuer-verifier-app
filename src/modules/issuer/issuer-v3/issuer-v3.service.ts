@@ -4,11 +4,12 @@ import {
   updateCredentialStatus as _updateCredentialStatus,
   registerIssuer as _registerIssuer,
   verifySubjectCredentialRequests as _verifySubjectCredentialRequests,
+  verifySubjectDidDocument as _verifySubjectDidDocument,
   UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
 import { VerifiedStatus } from '@unumid/server-sdk-deprecated-v2';
-import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SubjectCredentialRequest } from '@unumid/types';
+import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SubjectCredentialRequest, SignedDidDocument } from '@unumid/types';
 
 @Injectable()
 export class IssuerV3Service {
@@ -49,6 +50,17 @@ export class IssuerV3Service {
       return _verifySubjectCredentialRequests(authorization, issuerDid, requests);
     } catch (error) {
       Logger.error(`Error using UnumID SDK verifySubjectCredentialRequests ${error}`);
+      throw error;
+    }
+  }
+
+  verifySubjectDidDocument (authorization: string, issuerDid: string, didDocument: SignedDidDocument): Promise<UnumDto<VerifiedStatus>> {
+    Logger.debug(`Verifying subject SignedDidDocument ${didDocument}.`);
+
+    try {
+      return _verifySubjectDidDocument(authorization, issuerDid, didDocument);
+    } catch (error) {
+      Logger.error(`Error using UnumID SDK verifySubjectDidDocument ${error}`);
       throw error;
     }
   }
