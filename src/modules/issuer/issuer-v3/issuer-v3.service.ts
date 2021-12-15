@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   issueCredential as _issueCredential,
   updateCredentialStatus as _updateCredentialStatus,
+  updateCredentialStatuses as _updateCredentialStatuses,
   registerIssuer as _registerIssuer,
   verifySubjectCredentialRequests as _verifySubjectCredentialRequests,
   verifySubjectDidDocument as _verifySubjectDidDocument,
@@ -9,13 +10,13 @@ import {
   RegisteredIssuer
 } from '@unumid/server-sdk';
 import { VerifiedStatus } from '@unumid/server-sdk-deprecated-v2';
-import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SubjectCredentialRequest, SignedDidDocument } from '@unumid/types';
+import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SubjectCredentialRequest, SignedDidDocument, CredentialStatusesOptions, VersionInfo } from '@unumid/types';
 
 @Injectable()
 export class IssuerV3Service {
-  registerIssuer (customerUuid: string, apiKey: string): Promise<UnumDto<RegisteredIssuer>> {
+  registerIssuer (customerUuid: string, apiKey: string, url: string, versionInfo: VersionInfo[]): Promise<UnumDto<RegisteredIssuer>> {
     try {
-      return _registerIssuer(customerUuid, apiKey);
+      return _registerIssuer(customerUuid, apiKey, url, versionInfo);
     } catch (error) {
       Logger.error(`Error using UnumID SDK registerIssuer ${error}`);
       throw error;
@@ -43,11 +44,22 @@ export class IssuerV3Service {
     }
   }
 
-  verifySubjectCredentialRequests (authorization: string, issuerDid: string, requests: SubjectCredentialRequest[]): Promise<UnumDto<VerifiedStatus>> {
+  updateCredentialStatuses (authorization: string, credentialIds: string[], status: CredentialStatusOptions = 'revoked'): Promise<UnumDto<Credential>> {
+    Logger.debug(`Updating credentials ${credentialIds} to status ${status}.`);
+
+    try {
+      return _updateCredentialStatuses(authorization, credentialIds, status);
+    } catch (error) {
+      Logger.error(`Error using UnumID SDK revokeCredential ${error}`);
+      throw error;
+    }
+  }
+
+  verifySubjectCredentialRequests (authorization: string, issuerDid: string, subjectDid: string, requests: SubjectCredentialRequest[]): Promise<UnumDto<VerifiedStatus>> {
     Logger.debug(`Verifying subject credential requests ${requests}.`);
 
     try {
-      return _verifySubjectCredentialRequests(authorization, issuerDid, requests);
+      return _verifySubjectCredentialRequests(authorization, issuerDid, subjectDid, requests);
     } catch (error) {
       Logger.error(`Error using UnumID SDK verifySubjectCredentialRequests ${error}`);
       throw error;

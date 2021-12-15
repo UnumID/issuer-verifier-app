@@ -23,7 +23,7 @@ export class IssuerController {
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.issuerV2Service.registerIssuer(dto.name, dto.customerUuid, dto.apiKey);
       } else {
-        result = await this.issuerV3Service.registerIssuer(dto.customerUuid, dto.apiKey);
+        result = await this.issuerV3Service.registerIssuer(dto.customerUuid, dto.apiKey, dto.url, dto.versionInfo);
       }
 
       // todo figure out the more elegant NestJS way of doing this.
@@ -75,7 +75,7 @@ export class IssuerController {
   @Post('updateCredentialStatus')
   @UseGuards(AuthGuard)
   @HttpCode(200)
-  async revokeCredential (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+  async updateCredentialStatus (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     try {
       const auth = req.headers.authorization;
 
@@ -103,6 +103,34 @@ export class IssuerController {
     }
   }
 
+  @Post('updateCredentialStatuses')
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  async updateCredentialStatuses (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+    try {
+      const auth = req.headers.authorization;
+
+      if (lt(req.headers.version as string, '3.0.0')) {
+        throw new Error('Not supported');
+      }
+
+      const result = await this.issuerV3Service.updateCredentialStatuses(auth, dto.credentialIds, dto.status);
+
+      return res.set({ 'x-auth-token': result.authToken }).json(result.body);
+    } catch (error) {
+      if (error.name === 'CustError') {
+        res.status(error.code);
+        return res.json({
+          name: 'CustomError',
+          message: error.message
+        });
+      }
+
+      res.status(400);
+      return res.json(error);
+    }
+  }
+
   @Post('verifySubjectCredentialRequests')
   @UseGuards(AuthGuard)
   @HttpCode(200)
@@ -113,7 +141,8 @@ export class IssuerController {
       if (lt(req.headers.version as string, '3.0.0')) {
         throw new Error('Not supported');
       }
-      const result = await this.issuerV3Service.verifySubjectCredentialRequests(auth, dto.issuerDid, dto.subjectCredentialRequests);
+
+      const result = await this.issuerV3Service.verifySubjectCredentialRequests(auth, dto.issuerDid, dto.subjectDid, dto.subjectCredentialRequests);
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
