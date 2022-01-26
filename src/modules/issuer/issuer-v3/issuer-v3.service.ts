@@ -5,18 +5,18 @@ import {
   updateCredentialStatuses as _updateCredentialStatuses,
   registerIssuer as _registerIssuer,
   verifySubjectCredentialRequests as _verifySubjectCredentialRequests,
-  verifySubjectDidDocument as _verifySubjectDidDocument,
+  verifySignedDid as _verifySignedDid,
   UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
 import { VerifiedStatus } from '@unumid/server-sdk-deprecated-v2';
-import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SubjectCredentialRequest, SignedDidDocument, CredentialStatusesOptions, VersionInfo } from '@unumid/types';
+import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SignedDidDocument, SubjectCredentialRequests, VersionInfo, DID } from '@unumid/types';
 
 @Injectable()
 export class IssuerV3Service {
-  registerIssuer (customerUuid: string, apiKey: string, url: string, versionInfo: VersionInfo[]): Promise<UnumDto<RegisteredIssuer>> {
+  registerIssuer (apiKey: string, url: string, versionInfo: VersionInfo[]): Promise<UnumDto<RegisteredIssuer>> {
     try {
-      return _registerIssuer(customerUuid, apiKey, url, versionInfo);
+      return _registerIssuer(apiKey, url, versionInfo);
     } catch (error) {
       Logger.error(`Error using UnumID SDK registerIssuer ${error}`);
       throw error;
@@ -55,7 +55,7 @@ export class IssuerV3Service {
     }
   }
 
-  verifySubjectCredentialRequests (authorization: string, issuerDid: string, subjectDid: string, requests: SubjectCredentialRequest[]): Promise<UnumDto<VerifiedStatus>> {
+  verifySubjectCredentialRequests (authorization: string, issuerDid: string, subjectDid: string, requests: SubjectCredentialRequests): Promise<UnumDto<VerifiedStatus>> {
     Logger.debug(`Verifying subject credential requests ${requests}.`);
 
     try {
@@ -66,11 +66,11 @@ export class IssuerV3Service {
     }
   }
 
-  verifySubjectDidDocument (authorization: string, issuerDid: string, didDocument: SignedDidDocument): Promise<UnumDto<VerifiedStatus>> {
-    Logger.debug(`Verifying subject SignedDidDocument ${didDocument}.`);
+  verifySignedDid (authorization: string, issuerDid: string, did: DID): Promise<UnumDto<VerifiedStatus>> {
+    Logger.debug(`Verifying subject SignedDidDocument ${did}.`);
 
     try {
-      return _verifySubjectDidDocument(authorization, issuerDid, didDocument);
+      return _verifySignedDid(authorization, issuerDid, did);
     } catch (error) {
       Logger.error(`Error using UnumID SDK verifySubjectDidDocument ${error}`);
       throw error;

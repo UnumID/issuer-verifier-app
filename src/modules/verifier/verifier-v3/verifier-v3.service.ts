@@ -5,19 +5,19 @@ import {
   sendSms as _sendSms,
   sendRequest as _sendRequest,
   verifyPresentation as _verifyPresentation,
-  checkCredentialStatus as _checkCredentialStatus,
+  checkCredentialStatuses as _checkCredentialStatuses,
   RegisteredVerifier,
   UnumDto,
   DecryptedPresentation,
   CredentialStatusInfo
 } from '@unumid/server-sdk';
-import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto } from '@unumid/types';
+import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto, CredentialIdToStatusMap } from '@unumid/types';
 
 @Injectable()
 export class VerifierV3Service {
-  registerVerifier (customerUuid: string, url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
+  registerVerifier (url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
     try {
-      return _registerVerifier(customerUuid, url, apiKey);
+      return _registerVerifier(url, apiKey);
     } catch (error) {
       Logger.error('Error handling registerVerifier with UnumID SaaS', error);
       throw error;
@@ -42,7 +42,7 @@ export class VerifierV3Service {
     }
   }
 
-  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestPostDto>> {
+  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestDto>> {
     try {
       return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid, expirationDate, metadata);
     } catch (error) {
@@ -60,9 +60,9 @@ export class VerifierV3Service {
     }
   }
 
-  checkCredentialStatus (authorization: string, credentialId: string): Promise<UnumDto<CredentialStatusInfo>> {
+  checkCredentialStatuses (authorization: string, credentialIds: string[]): Promise<UnumDto<CredentialIdToStatusMap>> {
     try {
-      return _checkCredentialStatus(authorization, credentialId);
+      return _checkCredentialStatuses(authorization, credentialIds);
     } catch (error) {
       Logger.error('Error handling checking credential status request to UnumID Saas.', error);
       throw error;

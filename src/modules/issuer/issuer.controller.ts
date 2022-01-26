@@ -23,7 +23,7 @@ export class IssuerController {
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.issuerV2Service.registerIssuer(dto.name, dto.customerUuid, dto.apiKey);
       } else {
-        result = await this.issuerV3Service.registerIssuer(dto.customerUuid, dto.apiKey, dto.url, dto.versionInfo);
+        result = await this.issuerV3Service.registerIssuer(dto.apiKey, dto.url, dto.versionInfo);
       }
 
       // todo figure out the more elegant NestJS way of doing this.
@@ -159,17 +159,17 @@ export class IssuerController {
     }
   }
 
-  @Post('verifySubjectDidDocument')
+  @Post('verifySignedDid')
   @UseGuards(AuthGuard)
   @HttpCode(200)
-  async verifySubjectDidDocument (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+  async verifySignedDid (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
     try {
       const auth = req.headers.authorization;
 
       if (lt(req.headers.version as string, '3.0.0')) {
         throw new Error('Not supported');
       }
-      const result = await this.issuerV3Service.verifySubjectDidDocument(auth, dto.issuerDid, dto.didDocument);
+      const result = await this.issuerV3Service.verifySignedDid(auth, dto.issuerDid, dto.did);
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
