@@ -72,6 +72,33 @@ export class IssuerController {
     }
   }
 
+  @Post('issueCredentials')
+  @UseGuards(AuthGuard)
+  async issueCredentials (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+    try {
+      const auth = req.headers.authorization;
+
+      if (lt(req.headers.version as string, '3.0.0')) {
+        throw new Error('Not supported');
+      }
+
+      const result = await this.issuerV3Service.issueCredentials(auth, dto.issuerDid, dto.subjectDid, dto.credentialDataList, dto.eccPrivateKey, dto.expirationDate);
+
+      return res.set({ 'x-auth-token': result.authToken }).json(result.body);
+    } catch (error) {
+      if (error.name === 'CustError') {
+        res.status(error.code);
+        return res.json({
+          name: 'CustomError',
+          message: error.message
+        });
+      }
+
+      res.status(400);
+      return res.json(error);
+    }
+  }
+
   @Post('updateCredentialStatus')
   @UseGuards(AuthGuard)
   @HttpCode(200)
@@ -170,6 +197,33 @@ export class IssuerController {
         throw new Error('Not supported');
       }
       const result = await this.issuerV3Service.verifySignedDid(auth, dto.issuerDid, dto.did);
+
+      return res.set({ 'x-auth-token': result.authToken }).json(result.body);
+    } catch (error) {
+      if (error.name === 'CustError') {
+        res.status(error.code);
+        return res.json({
+          name: 'CustomError',
+          message: error.message
+        });
+      }
+
+      res.status(400);
+      return res.json(error);
+    }
+  }
+
+  @Post('revokeAllCredentials')
+  @UseGuards(AuthGuard)
+  @HttpCode(200)
+  async revokeAllCredentials (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+    try {
+      const auth = req.headers.authorization;
+
+      if (lt(req.headers.version as string, '3.0.0')) {
+        throw new Error('Not supported');
+      }
+      const result = await this.issuerV3Service.revokeAllCredentials(auth, dto.issuerDid, dto.privateSigningKey, dto.subjectDid);
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {

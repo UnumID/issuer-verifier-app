@@ -1,16 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
   issueCredential as _issueCredential,
+  issueCredentials as _issueCredentials,
   updateCredentialStatus as _updateCredentialStatus,
   updateCredentialStatuses as _updateCredentialStatuses,
   registerIssuer as _registerIssuer,
   verifySubjectCredentialRequests as _verifySubjectCredentialRequests,
   verifySignedDid as _verifySignedDid,
+  revokeAllCredentials as _revokeAllCredentials,
   UnumDto,
   RegisteredIssuer
 } from '@unumid/server-sdk';
 import { VerifiedStatus } from '@unumid/server-sdk-deprecated-v2';
-import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SignedDidDocument, SubjectCredentialRequests, VersionInfo, DID } from '@unumid/types';
+import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SignedDidDocument, SubjectCredentialRequests, VersionInfo, DID, CredentialData } from '@unumid/types';
 
 @Injectable()
 export class IssuerV3Service {
@@ -27,6 +29,16 @@ export class IssuerV3Service {
     try {
       const expiration = expirationDate ? new Date(expirationDate) : undefined;
       return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, expiration);
+    } catch (error) {
+      Logger.error(`Error using UnumID SDK issueCredential ${error}`);
+      throw error;
+    }
+  }
+
+  issueCredentials (authorization: string | undefined, issuerDid: string, subjectDid: string, credentialDataList: CredentialData[], eccPrivateKey: string, expirationDate?: string): Promise<UnumDto<(CredentialPb | Credential)[]>> {
+    try {
+      const expiration = expirationDate ? new Date(expirationDate) : undefined;
+      return _issueCredentials(authorization, issuerDid, subjectDid, credentialDataList, eccPrivateKey, expiration);
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
       throw error;
@@ -71,6 +83,17 @@ export class IssuerV3Service {
 
     try {
       return _verifySignedDid(authorization, issuerDid, did);
+    } catch (error) {
+      Logger.error(`Error using UnumID SDK verifySubjectDidDocument ${error}`);
+      throw error;
+    }
+  }
+
+  revokeAllCredentials (authorization: string, issuerDid: string, signingPrivateKey: string, subjectDid: string): Promise<UnumDto<VerifiedStatus>> {
+    Logger.debug(`Revoking all credentials issued by ${issuerDid} for subject ${subjectDid}.`);
+
+    try {
+      return _revokeAllCredentials(authorization, issuerDid, signingPrivateKey, subjectDid);
     } catch (error) {
       Logger.error(`Error using UnumID SDK verifySubjectDidDocument ${error}`);
       throw error;
