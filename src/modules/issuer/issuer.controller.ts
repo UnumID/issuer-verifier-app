@@ -42,36 +42,6 @@ export class IssuerController {
     }
   }
 
-  @Post('issueCredential')
-  @UseGuards(AuthGuard)
-  async issueCredential (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
-    try {
-      const auth = req.headers.authorization;
-
-      let result;
-      if (lt(req.headers.version as string, '2.0.0')) {
-        result = await this.issuerService.issueCredential(auth, dto.type, dto.issuer, dto.credentialSubject, dto.eccPrivateKey, dto.expirationDate);
-      } else if (lt(req.headers.version as string, '3.0.0')) {
-        result = await this.issuerV2Service.issueCredential(auth, dto.type, dto.issuer, dto.credentialSubject, dto.eccPrivateKey, dto.expirationDate);
-      } else {
-        result = await this.issuerV3Service.issueCredential(auth, dto.type, dto.issuer, dto.credentialSubject, dto.eccPrivateKey, dto.expirationDate);
-      }
-
-      return res.set({ 'x-auth-token': result.authToken }).json(result.body);
-    } catch (error) {
-      if (error.name === 'CustError') {
-        res.status(error.code);
-        return res.json({
-          name: 'CustomError',
-          message: error.message
-        });
-      }
-
-      res.status(400);
-      return res.json(error);
-    }
-  }
-
   @Post('issueCredentials')
   @UseGuards(AuthGuard)
   async issueCredentials (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
@@ -82,7 +52,7 @@ export class IssuerController {
         throw new Error('Not supported');
       }
 
-      const result = await this.issuerV3Service.issueCredentials(auth, dto.issuerDid, dto.subjectDid, dto.credentialDataList, dto.eccPrivateKey, dto.expirationDate);
+      const result = await this.issuerV3Service.issueCredentials(auth, dto.issuerDid, dto.subjectDid, dto.credentialDataList, dto.eccPrivateKey, dto.expirationDate, dto.issueToSelf);
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
