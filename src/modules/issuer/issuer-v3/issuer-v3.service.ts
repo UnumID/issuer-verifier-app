@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
-  issueCredential as _issueCredential,
   issueCredentials as _issueCredentials,
   updateCredentialStatus as _updateCredentialStatus,
   updateCredentialStatuses as _updateCredentialStatuses,
@@ -25,20 +24,10 @@ export class IssuerV3Service {
     }
   }
 
-  issueCredential (authorization: string | undefined, type: string | string[], issuer: string, credentialSubject: CredentialSubject, eccPrivateKey: string, expirationDate?: string): Promise<UnumDto<CredentialPb>> {
+  issueCredentials (authorization: string | undefined, issuerDid: string, subjectDid: string, credentialDataList: CredentialData[], eccPrivateKey: string, expirationDate?: string, issueToSelf = true): Promise<UnumDto<(CredentialPb | Credential)[]>> {
     try {
       const expiration = expirationDate ? new Date(expirationDate) : undefined;
-      return _issueCredential(authorization, type, issuer, credentialSubject, eccPrivateKey, expiration);
-    } catch (error) {
-      Logger.error(`Error using UnumID SDK issueCredential ${error}`);
-      throw error;
-    }
-  }
-
-  issueCredentials (authorization: string | undefined, issuerDid: string, subjectDid: string, credentialDataList: CredentialData[], eccPrivateKey: string, expirationDate?: string): Promise<UnumDto<(CredentialPb | Credential)[]>> {
-    try {
-      const expiration = expirationDate ? new Date(expirationDate) : undefined;
-      return _issueCredentials(authorization, issuerDid, subjectDid, credentialDataList, eccPrivateKey, expiration);
+      return _issueCredentials(authorization, issuerDid, subjectDid, credentialDataList, eccPrivateKey, expiration, issueToSelf);
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
       throw error;
