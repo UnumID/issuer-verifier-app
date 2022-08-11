@@ -41,7 +41,7 @@
     "@nestjs/config": "^0.6.1",
     "@nestjs/core": "^7.5.1",
     "@nestjs/platform-express": "^7.5.1",
-    "@unumid/server-sdk": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#3.26.1",
+    "@unumid/server-sdk": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#3.26.4",
     "@unumid/server-sdk-deprecated-v2": "npm:@unumid/server-sdk@2.1.5",
     "@unumid/server-sdk-deprecated-v1": "git+ssh://git@github.com/UnumID/server-sdk-typescript.git#1.4.0",
     "@unumid/types": "git+ssh://git@github.com/UnumID/types.git#3.53.0",

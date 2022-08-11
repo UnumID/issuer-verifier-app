@@ -17,7 +17,7 @@ import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto, Cred
 export class VerifierV3Service {
   registerVerifier (url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
     try {
-      return _registerVerifier(url, apiKey);
+      return _registerVerifier(apiKey, url);
     } catch (error) {
       Logger.error('Error handling registerVerifier with UnumID SaaS', error);
       throw error;
