@@ -79,7 +79,7 @@ export class IssuerController {
         throw new Error('Not supported');
       }
 
-      const result = await this.issuerV3Service.reEncryptCredentials(auth, dto.issuerDid, dto.signingPrivateKey, dto.encryptionPrivateKey, dto.subjectDid, dto.issuerEncryptionKeyId);
+      const result = await this.issuerV3Service.reEncryptCredentials(auth, dto.issuerDid, dto.signingPrivateKey, dto.encryptionPrivateKey, dto.subjectDid, dto.issuerEncryptionKeyId, dto.credentialTypes);
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
     } catch (error) {
