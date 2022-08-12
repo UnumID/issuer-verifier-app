@@ -35,9 +35,9 @@ export class IssuerV3Service {
     }
   }
 
-  reEncryptCredentials (authorization: string, issuerDid: string, signingPrivateKey: string, encryptionPrivateKey: string, subjectDid: string, issuerEncryptionKeyId: string): Promise<UnumDto<(CredentialPb | Credential)[]>> {
+  reEncryptCredentials (authorization: string, issuerDid: string, signingPrivateKey: string, encryptionPrivateKey: string, subjectDid: string, issuerEncryptionKeyId: string, credentialTypes: string[]): Promise<UnumDto<(CredentialPb | Credential)[]>> {
     try {
-      return _reEncryptCredentials(authorization, issuerDid, signingPrivateKey, encryptionPrivateKey, subjectDid, issuerEncryptionKeyId);
+      return _reEncryptCredentials(authorization, issuerDid, signingPrivateKey, encryptionPrivateKey, issuerEncryptionKeyId, subjectDid, credentialTypes);
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
       throw error;
