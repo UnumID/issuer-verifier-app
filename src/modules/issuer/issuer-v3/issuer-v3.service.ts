@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
   issueCredentials as _issueCredentials,
+  reEncryptCredentials as _reEncryptCredentials,
   updateCredentialStatus as _updateCredentialStatus,
   updateCredentialStatuses as _updateCredentialStatuses,
   registerIssuer as _registerIssuer,
@@ -28,6 +29,15 @@ export class IssuerV3Service {
     try {
       const expiration = expirationDate ? new Date(expirationDate) : undefined;
       return _issueCredentials(authorization, issuerDid, subjectDid, credentialDataList, eccPrivateKey, expiration, issueToSelf);
+    } catch (error) {
+      Logger.error(`Error using UnumID SDK issueCredential ${error}`);
+      throw error;
+    }
+  }
+
+  reEncryptCredentials (authorization: string, issuerDid: string, signingPrivateKey: string, encryptionPrivateKey: string, subjectDid: string, issuerEncryptionKeyId: string): Promise<UnumDto<(CredentialPb | Credential)[]>> {
+    try {
+      return _reEncryptCredentials(authorization, issuerDid, signingPrivateKey, encryptionPrivateKey, subjectDid, issuerEncryptionKeyId);
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
       throw error;
