@@ -44,7 +44,7 @@ export class VerifierV3Service {
 
   sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestDto>> {
     try {
-      const expiration = new Date(expirationDate);
+      const expiration = expirationDate ? new Date(expirationDate) : undefined;
       return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid, expiration, metadata);
     } catch (error) {
       Logger.error('Error handling sendRequest to UnumID SaaS', error);
