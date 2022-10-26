@@ -11,7 +11,13 @@ import {
   DecryptedPresentation,
   CredentialStatusInfo
 } from '@unumid/server-sdk';
-import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto, CredentialIdToStatusMap } from '@unumid/types';
+import {
+  EncryptedData,
+  PresentationRequestDto,
+  PresentationRequestPostDto,
+  CredentialIdToStatusMap,
+  PresentationRequestEnriched
+} from '@unumid/types';
 
 @Injectable()
 export class VerifierV3Service {
@@ -42,7 +48,7 @@ export class VerifierV3Service {
     }
   }
 
-  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestDto>> {
+  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestEnriched>> {
     try {
       return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid, expirationDate, metadata);
     } catch (error) {
@@ -51,7 +57,7 @@ export class VerifierV3Service {
     }
   }
 
-  async verifyPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string, presentationRequest?: PresentationRequestDto): Promise<UnumDto<DecryptedPresentation>> {
+  async verifyPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string, presentationRequest?: PresentationRequestEnriched): Promise<UnumDto<DecryptedPresentation>> {
     try {
       return await _verifyPresentation(authorization, presentation, verifier, encryptionPrivateKey, presentationRequest);
     } catch (error) {
