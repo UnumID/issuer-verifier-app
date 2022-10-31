@@ -10,12 +10,12 @@ import {
   revokeAllCredentials as _revokeAllCredentials,
   UnumDto,
   RegisteredIssuer
-} from '@unumid/server-sdk-deprecated-v3';
+} from '@unumid/server-sdk';
 import { VerifiedStatus } from '@unumid/server-sdk-deprecated-v2';
-import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SignedDidDocument, SubjectCredentialRequests, VersionInfo, DID, CredentialData } from '@unumid/types-deprecated-v3';
+import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SignedDidDocument, SubjectCredentialRequests, VersionInfo, DID, CredentialData } from '@unumid/types';
 
 @Injectable()
-export class IssuerV3Service {
+export class IssuerV4Service {
   registerIssuer (apiKey: string, url: string, versionInfo: VersionInfo[]): Promise<UnumDto<RegisteredIssuer>> {
     try {
       return _registerIssuer(apiKey, url, versionInfo);
