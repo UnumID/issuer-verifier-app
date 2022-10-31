@@ -10,11 +10,11 @@ import {
   UnumDto,
   DecryptedPresentation,
   CredentialStatusInfo
-} from '@unumid/server-sdk-deprecated-v3';
-import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto, CredentialIdToStatusMap } from '@unumid/types-deprecated-v3';
+} from '@unumid/server-sdk';
+import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto, CredentialIdToStatusMap } from '@unumid/types';
 
 @Injectable()
-export class VerifierV3Service {
+export class VerifierV4Service {
   registerVerifier (url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
     try {
       return _registerVerifier(apiKey, url);
