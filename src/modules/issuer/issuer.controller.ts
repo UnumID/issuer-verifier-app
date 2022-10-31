@@ -120,7 +120,7 @@ export class IssuerController {
       } else if (lt(req.headers.version as string, '4.0.0')) {
         result = await this.issuerV3Service.updateCredentialStatus(auth, dto.credentialId, dto.status);
       } else {
-        result = await this.issuerV4Service.updateCredentialStatus(auth, dto.credentialId, dto.status);
+        throw new Error('Not supported');
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
