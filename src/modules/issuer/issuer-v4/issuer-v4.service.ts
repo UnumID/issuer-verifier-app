@@ -2,20 +2,19 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   issueCredentials as _issueCredentials,
   reEncryptCredentials as _reEncryptCredentials,
-  updateCredentialStatus as _updateCredentialStatus,
   updateCredentialStatuses as _updateCredentialStatuses,
   registerIssuer as _registerIssuer,
   verifySubjectCredentialRequests as _verifySubjectCredentialRequests,
   verifySignedDid as _verifySignedDid,
   revokeAllCredentials as _revokeAllCredentials,
   UnumDto,
-  RegisteredIssuer
-} from '@unumid/server-sdk-deprecated-v3';
-import { VerifiedStatus } from '@unumid/server-sdk-deprecated-v2';
-import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SignedDidDocument, SubjectCredentialRequests, VersionInfo, DID, CredentialData } from '@unumid/types-deprecated-v3';
+  RegisteredIssuer,
+  VerifiedStatus
+} from '@unumid/server-sdk';
+import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SignedDidDocument, SubjectCredentialRequests, VersionInfo, DID, CredentialData } from '@unumid/types';
 
 @Injectable()
-export class IssuerV3Service {
+export class IssuerV4Service {
   registerIssuer (apiKey: string, url: string, versionInfo: VersionInfo[]): Promise<UnumDto<RegisteredIssuer>> {
     try {
       return _registerIssuer(apiKey, url, versionInfo);
@@ -40,17 +39,6 @@ export class IssuerV3Service {
       return _reEncryptCredentials(authorization, issuerDid, signingPrivateKey, encryptionPrivateKey, issuerEncryptionKeyId, subjectDid, credentialTypes);
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
-      throw error;
-    }
-  }
-
-  updateCredentialStatus (authorization: string, credentialId: string, status: CredentialStatusOptions = 'revoked'): Promise<UnumDto<Credential>> {
-    Logger.debug(`Updating credential ${credentialId} to status ${status}.`);
-
-    try {
-      return _updateCredentialStatus(authorization, credentialId, status);
-    } catch (error) {
-      Logger.error(`Error using UnumID SDK revokeCredential ${error}`);
       throw error;
     }
   }

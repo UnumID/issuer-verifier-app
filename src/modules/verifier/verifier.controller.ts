@@ -6,11 +6,12 @@ import { VersionGuard } from '../../guards/version.guard';
 import { lt } from 'semver';
 import { VerifierV2Service } from './verifier-v2/verifier-v2.service';
 import { VerifierV3Service } from './verifier-v3/verifier-v3.service';
+import { VerifierV4Service } from './verifier-v4/verifier-v4.service';
 
 @UseGuards(VersionGuard)
 @Controller('verifier/api')
 export class VerifierController {
-  constructor (private verifierService: VerifierService, private verifierV2Service: VerifierV2Service, private verifierV3Service: VerifierV3Service) {}
+  constructor (private verifierService: VerifierService, private verifierV2Service: VerifierV2Service, private verifierV3Service: VerifierV3Service, private verifierV4Service: VerifierV4Service) {}
 
   // todo and real types to these requests
   @Post('register')
@@ -21,8 +22,10 @@ export class VerifierController {
         result = await this.verifierService.registerVerifier(dto.name, dto.customerUuid, dto.url, dto.apiKey);
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.verifierV2Service.registerVerifier(dto.name, dto.customerUuid, dto.url, dto.apiKey);
-      } else {
+      } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.verifierV3Service.registerVerifier(dto.url, dto.apiKey);
+      } else {
+        result = await this.verifierV4Service.registerVerifier(dto.url, dto.apiKey);
       }
 
       // todo figure out the more elegant NestJS way of doing this.
@@ -52,6 +55,8 @@ export class VerifierController {
         result = await this.verifierService.sendEmail(auth, dto.to, dto.deeplink);
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.verifierV2Service.sendEmail(auth, dto.to, dto.deeplink);
+      } else if (lt(req.headers.version as string, '4.0.0')) {
+        result = await this.verifierV3Service.sendEmail(auth, dto.to, dto.deeplink);
       } else {
         result = await this.verifierV3Service.sendEmail(auth, dto.to, dto.deeplink);
       }
@@ -82,8 +87,10 @@ export class VerifierController {
         result = await this.verifierService.sendSms(auth, dto.to, dto.deeplink);
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.verifierV2Service.sendSms(auth, dto.to, dto.deeplink);
-      } else {
+      } else if (lt(req.headers.version as string, '4.0.0')) {
         result = await this.verifierV3Service.sendSms(auth, dto.to, dto.deeplink);
+      } else {
+        result = await this.verifierV4Service.sendSms(auth, dto.to, dto.deeplink);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
@@ -112,8 +119,10 @@ export class VerifierController {
         result = await this.verifierService.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid, dto.expirationDate, dto.metadata);
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.verifierV2Service.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid, dto.expirationDate, dto.metadata);
-      } else {
+      } else if (lt(req.headers.version as string, '4.0.0')) {
         result = await this.verifierV3Service.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid, dto.expirationDate, dto.metadata);
+      } else {
+        result = await this.verifierV4Service.sendRequest(auth, dto.verifier, dto.credentialRequests, dto.eccPrivateKey, dto.holderAppUuid, dto.expirationDate, dto.metadata);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
@@ -142,8 +151,10 @@ export class VerifierController {
         result = await this.verifierService.verifyPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey, dto.presentationRequest);
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.verifierV2Service.verifyPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey, dto.presentationRequest);
-      } else {
+      } else if (lt(req.headers.version as string, '4.0.0')) {
         result = await this.verifierV3Service.verifyPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey, dto.presentationRequest);
+      } else {
+        result = await this.verifierV4Service.verifyPresentation(auth, dto.encryptedPresentation, dto.verifier, dto.encryptionPrivateKey, dto.presentationRequest);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
@@ -171,8 +182,10 @@ export class VerifierController {
         result = await this.verifierService.checkCredentialStatus(auth, params.id);
       } else if (lt(req.headers.version as string, '3.0.0')) {
         result = await this.verifierService.checkCredentialStatus(auth, params.id);
-      } else {
+      } else if (lt(req.headers.version as string, '4.0.0')) {
         result = await this.verifierV3Service.checkCredentialStatuses(auth, [params.id]);
+      } else {
+        result = await this.verifierV4Service.checkCredentialStatuses(auth, [params.id]);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);

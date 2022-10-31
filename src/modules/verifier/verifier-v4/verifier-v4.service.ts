@@ -10,11 +10,11 @@ import {
   UnumDto,
   DecryptedPresentation,
   CredentialStatusInfo
-} from '@unumid/server-sdk-deprecated-v3';
-import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto, CredentialIdToStatusMap } from '@unumid/types-deprecated-v3';
+} from '@unumid/server-sdk';
+import { EncryptedData, PresentationRequestDto, PresentationRequestPostDto, CredentialIdToStatusMap, PresentationRequestEnriched } from '@unumid/types';
 
 @Injectable()
-export class VerifierV3Service {
+export class VerifierV4Service {
   registerVerifier (url: string, apiKey: string): Promise<UnumDto<RegisteredVerifier>> {
     try {
       return _registerVerifier(apiKey, url);
@@ -42,7 +42,7 @@ export class VerifierV3Service {
     }
   }
 
-  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestDto>> {
+  sendRequest (authorization:string, verifier: string, credentialRequests: [], eccPrivateKey: string, holderAppUuid: string, expirationDate?: Date, metadata?: Record<string, unknown>): Promise<UnumDto<PresentationRequestEnriched>> {
     try {
       const expiration = expirationDate ? new Date(expirationDate) : undefined;
       return _sendRequest(authorization, verifier, credentialRequests, eccPrivateKey, holderAppUuid, expiration, metadata);
@@ -52,7 +52,7 @@ export class VerifierV3Service {
     }
   }
 
-  async verifyPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string, presentationRequest?: PresentationRequestDto): Promise<UnumDto<DecryptedPresentation>> {
+  async verifyPresentation (authorization: string, presentation: EncryptedData, verifier: string, encryptionPrivateKey: string, presentationRequest?: PresentationRequestEnriched): Promise<UnumDto<DecryptedPresentation>> {
     try {
       return await _verifyPresentation(authorization, presentation, verifier, encryptionPrivateKey, presentationRequest);
     } catch (error) {
