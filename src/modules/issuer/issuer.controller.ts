@@ -7,6 +7,7 @@ import { IssuerV2Service } from './issuer-v2/issuer-v2.service';
 import { lt } from 'semver';
 import { IssuerV3Service } from './issuer-v3/issuer-v3.service';
 import { IssuerV4Service } from './issuer-v4/issuer-v4.service';
+import { HandleSubjectCredentialRequestsOptions } from '@unumid/server-sdk';
 
 @UseGuards(VersionGuard)
 @Controller('issuer/api')
@@ -88,6 +89,46 @@ export class IssuerController {
         result = await this.issuerV3Service.reEncryptCredentials(auth, dto.issuerDid, dto.signingPrivateKey, dto.encryptionPrivateKey, dto.subjectDid, dto.issuerEncryptionKeyId, dto.credentialTypes);
       } else {
         result = await this.issuerV4Service.reEncryptCredentials(auth, dto.issuerDid, dto.signingPrivateKey, dto.encryptionPrivateKey, dto.subjectDid, dto.issuerEncryptionKeyId, dto.credentialTypes);
+      }
+
+      return res.set({ 'x-auth-token': result.authToken }).json(result.body);
+    } catch (error) {
+      if (error.name === 'CustError') {
+        res.status(error.code);
+        return res.json({
+          name: 'CustomError',
+          message: error.message
+        });
+      }
+
+      res.status(400);
+      return res.json(error);
+    }
+  }
+
+  @Post('handleSubjectCredentialRequests')
+  @UseGuards(AuthGuard)
+  async handleSubjectCredentialRequests (@Request() req: Req, @Body() dto: any, @Response() res: Res) {
+    try {
+      const auth = req.headers.authorization;
+
+      const options: HandleSubjectCredentialRequestsOptions = {
+        authorization: auth,
+        issuerDid: dto.issuerDid,
+        subjectDid: dto.subjectDid,
+        subjectCredentialRequests: dto.subjectCredentialRequests,
+        reEncryptCredentialsOptions: {
+          signingPrivateKey: dto.reEncryptCredentialsOptions.signingPrivateKey,
+          encryptionPrivateKey: dto.reEncryptCredentialsOptions.encryptionPrivateKey,
+          issuerEncryptionKeyId: dto.issuerEncryptionKeyId
+        }
+      };
+
+      let result;
+      if (lt(req.headers.version as string, '4.0.0')) {
+        throw new Error('Not supported');
+      } else {
+        result = await this.issuerV4Service.handleSubjectCredentialRequests(options);
       }
 
       return res.set({ 'x-auth-token': result.authToken }).json(result.body);
