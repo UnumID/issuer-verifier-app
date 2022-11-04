@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import {
   issueCredentials as _issueCredentials,
   reEncryptCredentials as _reEncryptCredentials,
+  handleSubjectCredentialRequests as _handleSubjectCredentialRequests,
   updateCredentialStatuses as _updateCredentialStatuses,
   registerIssuer as _registerIssuer,
   verifySubjectCredentialRequests as _verifySubjectCredentialRequests,
@@ -9,7 +10,8 @@ import {
   revokeAllCredentials as _revokeAllCredentials,
   UnumDto,
   RegisteredIssuer,
-  VerifiedStatus
+  VerifiedStatus,
+  HandleSubjectCredentialRequestsOptions
 } from '@unumid/server-sdk';
 import { CredentialSubject, Credential, CredentialStatusOptions, CredentialPb, SignedDidDocument, SubjectCredentialRequests, VersionInfo, DID, CredentialData } from '@unumid/types';
 
@@ -24,21 +26,30 @@ export class IssuerV4Service {
     }
   }
 
-  issueCredentials (authorization: string | undefined, issuerDid: string, subjectDid: string, credentialDataList: CredentialData[], eccPrivateKey: string, expirationDate?: string, issueToSelf = true): Promise<UnumDto<(CredentialPb | Credential)[]>> {
+  issueCredentials (authorization: string | undefined, issuerDid: string, subjectDid: string, credentialDataList: CredentialData[], eccPrivateKey: string, expirationDate?: string, issueToSelf = true): Promise<UnumDto<(Credential)[]>> {
     try {
       const expiration = expirationDate ? new Date(expirationDate) : undefined;
-      return _issueCredentials(authorization, issuerDid, subjectDid, credentialDataList, eccPrivateKey, expiration, issueToSelf);
+      return _issueCredentials(authorization, issuerDid, subjectDid, credentialDataList, eccPrivateKey, expiration, issueToSelf) as Promise<UnumDto<Credential[]>>;
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
       throw error;
     }
   }
 
-  reEncryptCredentials (authorization: string, issuerDid: string, signingPrivateKey: string, encryptionPrivateKey: string, subjectDid: string, issuerEncryptionKeyId: string, credentialTypes: string[]): Promise<UnumDto<(CredentialPb | Credential)[]>> {
+  reEncryptCredentials (authorization: string, issuerDid: string, signingPrivateKey: string, encryptionPrivateKey: string, subjectDid: string, issuerEncryptionKeyId: string, credentialTypes: string[]): Promise<UnumDto<(Credential)[]>> {
     try {
       return _reEncryptCredentials(authorization, issuerDid, signingPrivateKey, encryptionPrivateKey, issuerEncryptionKeyId, subjectDid, credentialTypes);
     } catch (error) {
       Logger.error(`Error using UnumID SDK issueCredential ${error}`);
+      throw error;
+    }
+  }
+
+  handleSubjectCredentialRequests (options: HandleSubjectCredentialRequestsOptions): Promise<UnumDto<(Credential)[]>> {
+    try {
+      return _handleSubjectCredentialRequests(options);
+    } catch (error) {
+      Logger.error(`Error using UnumID SDK handleSubjectCredentialRequests ${error}`);
       throw error;
     }
   }
